@@ -1,0 +1,40 @@
+query GetNatalDatesQuery {
+  me {
+      ...UserFragment
+  }
+}
+
+mutation CreateNatalDate($date: String!, $name: String!, $location: String!, $primary: Boolean, $type: String) {
+  createNatalDate(input: {date: $date, name: $name, location: $location, primary: $primary, type: $type}) {
+    ...NatalDateFragment
+  }
+}
+
+mutation UpdateNatalDate($id: Int, $date: String!, $name: String!, $location: String!, $primary: Boolean, $type: String) {
+  updateNatalDate(input: {id: $id, date: $date, name: $name, location: $location, primary: $primary, type: $type}) {
+    ...NatalDateFragment
+  }
+}
+
+mutation UpdateUser($location: String!) {
+    updateUser(input: {location: $location}) {
+      ...UserFragment
+    }
+}
+
+fragment NatalDateFragment on NatalDate {
+    id
+    name
+    date
+    location
+    primary
+    type
+}
+
+fragment UserFragment on User {
+    email,
+    location,
+    natalDates {
+      ...NatalDateFragment
+    }
+}

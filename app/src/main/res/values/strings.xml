@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Astro Lucis</string>
+    <string name="empty"></string>
+
+    <string name="facebook_app_id">1741917992498773</string>
+    <string name="fb_login_protocol_scheme">fb1741917992498773</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- LOGIN -->
+    <string name="login.email.hint">Email</string>
+    <string name="login.password.hint">Ο κωδικός μου</string>
+    <string name="login.passwordRepeat.hint">Επανάλυψη του κωδικού μου</string>
+
+    <string name="login.loginButton.text">Εισοδος</string>
+    <string name="login.registerButton.text">Εγγραφη</string>
+    <string name="login.registerHint">Δεν έχω λογαριασμό. <b>Εγγραφή!</b></string>
+    <string name="login.loginHint">Έχω ήδη λογαριασμό. <b>Είσοδος!</b></string>
+    <string name="login.forgotPassword">Ξέχασα τον κωδικό μου. <b>Αλλαγή κωδικού!</b></string>
+
+
+
+    <string name="login.email.validationError">Το email δεν είναι έγκυρο</string>
+    <string name="login.email.emptyError">Το email δεν μπορεί να είναι κενό</string>
+    <string name="login.password.validationError">Ο κωδικός πρέπει να είναι τουλάχιστον 6 χαρακτήρες</string>
+    <string name="login.password.emptyError">Ο κωδικός δεν μπορεί να είναι κενός</string>
+    <string name="login.passwordRepeat.equalError">Οι κωδικοί που έβαλες πρέπει να είναι ίδιοι</string>
+
+    <string name="login.remindPassword">Μόλις σου αποστείλαμε email για την αλλαγή του κωδικού σου.</string>
+
+    <!-- NATAL DATES -->
+    <string-array name="natalTypes">
+        <item></item>
+        <item>Άνδρας</item>
+        <item>Γυναίκα</item>
+        <item>Ελεύθερη Ψυχή</item>
+    </string-array>
+
+    <string name="natalType.male">Άνδρας</string>
+    <string name="natalType.female">Γυναίκα</string>
+    <string name="natalType.freeSpirit">Ελεύθερη Ψυχή</string>
+
+    <string name="natalDate.livingLocation.emptyError">Ο τόπος κατοικίας δεν μπορεί να είναι κενός</string>
+    <string name="natalDate.livingLocation.helper">Μπορείς να εισάγεις οποιοδήποτε μέρος στον κόσμο</string>
+
+    <string name="natalDate.birthLocation.emptyError">Ο τόπος γέννησης δεν μπορεί να είναι κενός</string>
+    <string name="natalDate.birthDate.emptyError">Η χρονολογία γέννησης δεν μπορεί να είναι κενή</string>
+    <string name="natalDate.birthTime.emptyError">Η ώρα γέννησης δεν μπορεί να είναι κενή</string>
+    <string name="natalDate.birthTime.helper">Αν δεν γνωρίζεις την ώρα που γεννήθηκες μπορείς να το αφήσεις στις 12:00 το μεσημέρι</string>
+
+    <string name="natalDate.livingLocation.hint">Που κατοικώ</string>
+    <string name="natalDate.birthLocation.hint">Που γεννήθηκα</string>
+    <string name="natalDate.birthDate.hint">Πότε γεννήθηκα</string>
+    <string name="natalDate.birthTime.hint">Τι ώρα γέννηθηκα</string>
+    <string name="natalDate.type.hint">Είμαι</string>
+    <string name="natalDate.saveButton.text">Αποθήκευση</string>
+
+    <string name="natalDate.defaultTime">12:00</string>
+    <string name="natalDate.defaultCountry">Ελλάδα</string>
+
+    <string name="drawer.menu.profile">Το Προφίλ μου</string>
+    <string name="drawer.menu.natalDate">Ο Γεννέθλιος Χάρτης μου</string>
+    <string name="drawer.menu.dailyPredictions">Ημερήσιες Προβλέψεις</string>
+    <string name="drawer.menu.blog">Αστρολογία</string>
+    <string name="drawer.menu.logout">Έξοδος</string>
+
+    <!-- ERRORS -->
+    <string name="error.defaultTitle">Προσοχή</string>
+    <string name="error.invalidCredential">Το email ή ο κωδικός πρόσβασης δεν είναι σωστά!</string>
+    <string name="error.notUniqueEmail">To email αυτό έχει ήδη λογιαριασμό</string>
+    <string name="error.nullEmail">Δεν μας έγραψες τo email σου</string>
+    <string name="error.invalidLivingLocation">Δεν βρέθηκε ο τόπος κατοικίας σου, πάντα σύμφωνα με την google… :) </string>
+    <string name="error.invalidBirthLocation">Δεν βρέθηκε ο τόπος γέννησης σου, πάντα σύμφωνα με την google… :)</string>
+    <string name="error.invalidBirthDate">Η ημερομηνία ή ώρα γεννησης έχει λάθος μορφή</string>
+    <string name="error.general">Υπήρξε κάποιο πρόβλημα επικοινωνίας με τον ψηφιακό αστρολόγο… Δοκίμασε πάλι σε λιγάκι!</string>
+</resources>

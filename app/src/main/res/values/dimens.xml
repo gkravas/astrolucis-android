@@ -1,0 +1,10 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="padding_tiny">4dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+
+    <dimen name="profile_image_dimension">100dp</dimen>
+
+    <dimen name="min_touchable_height">40dp</dimen>
+</resources>
