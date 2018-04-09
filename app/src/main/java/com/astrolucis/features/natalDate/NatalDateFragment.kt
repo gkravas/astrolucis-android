@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentNatalDateBinding
+import com.astrolucis.utils.dialogs.AlertDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import org.koin.android.architecture.ext.viewModel
@@ -39,7 +40,7 @@ class NatalDateFragment : BaseFragment() {
         })
         viewModel.messagesLiveData.observe(this, android.arch.lifecycle.Observer {
             it?.let {
-                baseActivity.showAlertDialog(it.titleResId, it.messageResId)
+                baseActivity.showAlertDialog(it.dialogId, AlertDialog.Data(viewModel::class), it.titleResId, it.messageResId)
             }
         })
     }

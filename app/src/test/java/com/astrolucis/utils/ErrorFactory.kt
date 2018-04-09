@@ -1,4 +1,4 @@
-package com.astrolucis
+package com.astrolucis.utils
 
 import com.apollographql.apollo.api.Error
 import com.astrolucis.exceptions.GraphQLException
