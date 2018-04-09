@@ -1,2 +1,80 @@
 package com.astrolucis.utils.dialogs
 
+import android.app.Dialog
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.support.v7.app.AppCompatDialogFragment
+import com.astrolucis.core.BaseViewModel
+import java.io.Serializable
+import kotlin.reflect.KClass
+
+class AlertDialog: AppCompatDialogFragment() {
+
+    data class Data<T: BaseViewModel>(val viewModelClass: KClass<T>) : Serializable
+
+    companion object {
+        private const val TAG = "AlertDialog"
+        private const val ID = "$TAG.id"
+        private const val TITLE = "$TAG.title"
+        private const val MESSAGE = "$TAG.message"
+        private const val OK = "$TAG.ok"
+        private const val CANCEL = "$TAG.cancel"
+        private const val DATA = "$TAG.data"
+
+        fun newInstance(id: String, data: Data<*>, title: CharSequence, message: CharSequence, ok: CharSequence,
+                        cancel: CharSequence): AlertDialog {
+
+            return AlertDialog().also {
+                it.arguments = Bundle().apply {
+                    this.putCharSequence(ID, id ?: "")
+                    this.putCharSequence(TITLE, title ?: "")
+                    this.putCharSequence(MESSAGE, message ?: "")
+                    this.putCharSequence(OK, ok ?: "")
+                    this.putCharSequence(CANCEL, cancel ?: "")
+                    this.putSerializable(DATA, data ?: "")
+                }
+            }
+        }
+    }
+
+    lateinit var viewModel: BaseViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val data = arguments!![DATA]
+        if (data is Data<*>) {
+            viewModel = ViewModelProviders.of(requireActivity()).get(data.viewModelClass.java)
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = android.support.v7.app.AlertDialog.Builder(activity!!)
+        arguments?.let {
+            val id = it[ID] as String
+
+            builder.setMessage(it[MESSAGE] as String)
+
+            val titleLemma = it[TITLE] as String
+            if (titleLemma.isNotEmpty()) {
+                builder.setTitle(titleLemma)
+            }
+
+            val okLemma = it[OK] as String
+            if (okLemma.isNotEmpty()) {
+                builder.setPositiveButton(okLemma) { _, _ ->
+                    viewModel.onDialogAction(id, true)
+                }
+            }
+            val cancelLemma = it[CANCEL] as String
+            if (cancelLemma.isNotEmpty()) {
+                builder.setNegativeButton(cancelLemma) { _, _ ->
+                    viewModel.onDialogAction(id, false)
+                }
+            }
+        }
+        return builder.create()
+    }
+
+
+}
