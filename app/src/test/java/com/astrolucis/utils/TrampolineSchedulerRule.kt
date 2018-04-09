@@ -1,4 +1,4 @@
-package com.astrolucis
+package com.astrolucis.utils
 
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins

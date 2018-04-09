@@ -24,7 +24,7 @@ class HomeActivity: BaseActivity() {
 
 
     companion object {
-        const val openNatalDate = "openNatalDate"
+        const val OPEN_NATAL_DATE = "OPEN_NATAL_DATE"
     }
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -79,7 +79,7 @@ class HomeActivity: BaseActivity() {
     }
 
     override fun parseState(state: Bundle) {
-        viewModel.viewState.value = if (state.getBoolean(openNatalDate, false)) {
+        viewModel.viewState.value = if (state.getBoolean(OPEN_NATAL_DATE, false)) {
             HomeViewModel.ViewState.NATAL_DATE
         } else {
             HomeViewModel.ViewState.DAILY_PREDICTIONS

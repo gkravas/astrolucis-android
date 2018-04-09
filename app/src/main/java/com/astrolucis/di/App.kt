@@ -5,6 +5,7 @@ import com.astrolucis.services.*
 import com.astrolucis.features.home.HomeViewModel
 import com.astrolucis.features.login.LoginViewModel
 import com.astrolucis.features.natalDate.NatalDateViewModel
+import com.astrolucis.features.resetPassword.ResetPasswordViewModel
 import com.astrolucis.utils.routing.AppRouter
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.startKoin
@@ -12,7 +13,7 @@ import org.koin.dsl.module.Module
 import java.net.CookieManager
 import java.net.CookiePolicy
 
-class App() : Application() {
+class App : Application() {
 
 
     private val appModule : Module = org.koin.dsl.module.applicationContext {
@@ -32,6 +33,7 @@ class App() : Application() {
         viewModel { LoginViewModel(get(), get(), get()) }
         viewModel { HomeViewModel(get(), get()) }
         viewModel { NatalDateViewModel(get(), get(), get(), get()) }
+        viewModel { ResetPasswordViewModel(get(), get(), get(), get()) }
     }
 
     companion object {
