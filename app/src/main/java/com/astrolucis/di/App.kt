@@ -5,6 +5,7 @@ import com.astrolucis.services.*
 import com.astrolucis.features.home.HomeViewModel
 import com.astrolucis.features.login.LoginViewModel
 import com.astrolucis.features.natalDate.NatalDateViewModel
+import com.astrolucis.features.profile.ProfileViewModel
 import com.astrolucis.features.resetPassword.ResetPasswordViewModel
 import com.astrolucis.utils.routing.AppRouter
 import org.koin.android.architecture.ext.viewModel
@@ -34,6 +35,7 @@ class App : Application() {
         viewModel { HomeViewModel(get(), get()) }
         viewModel { NatalDateViewModel(get(), get(), get(), get()) }
         viewModel { ResetPasswordViewModel(get(), get(), get(), get()) }
+        viewModel { ProfileViewModel(get(), get(), get()) }
     }
 
     companion object {

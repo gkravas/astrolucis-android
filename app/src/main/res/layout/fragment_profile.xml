@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.astrolucis.R"/>
+        <variable name="viewModel" type="com.astrolucis.features.profile.ProfileViewModel"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="com.astrolucis.features.resetPassword.ResetPasswordViewModel">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_medium"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:layout_gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_small">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.TextAppearance.AppCompat.Title"
+                            android:gravity="center"
+                            android:text="@string/profile.changeEmailTitle.text"/>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:error="@{viewModel.emailError}">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/email_text_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textEmailAddress"
+                                android:hint="@string/login.email.hint"
+                                android:enabled="@{!viewModel.loadingEmail.get()}"
+                                android:text="@={viewModel.emailField}"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <ProgressBar
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:indeterminate="true"
+                            android:layout_marginTop="@dimen/padding_medium"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:visibilityGone="@{viewModel.loadingEmail.get()}"/>
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
+                            android:text="@string/profile.changeEmailButton.text"
+                            app:visibilityGone="@{!viewModel.loadingEmail.get()}"
+                            android:onClick="@{(v) -> viewModel.changeEmail()}"/>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_marginBottom="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_small">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.TextAppearance.AppCompat.Title"
+                            android:gravity="center"
+                            android:text="@string/profile.changePasswordTitle.text"/>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:passwordToggleEnabled="true"
+                            app:error="@{viewModel.passwordError}">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/password_text_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:hint="@string/login.password.hint"
+                                android:enabled="@{!viewModel.loadingPassword.get()}"
+                                android:text="@={viewModel.passwordField}"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:passwordToggleEnabled="true"
+                            app:error="@{viewModel.passwordRepeatError}">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/password_repeat_text_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:hint="@string/login.passwordRepeat.hint"
+                                android:enabled="@{!viewModel.loadingPassword.get()}"
+                                android:text="@={viewModel.passwordRepeatField}"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <ProgressBar
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:indeterminate="true"
+                            android:layout_marginTop="@dimen/padding_medium"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            app:visibilityGone="@{viewModel.loadingPassword.get()}"/>
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.Widget.AppCompat.Button.Colored"
+                            android:text="@string/profile.changePasswordButton.text"
+                            app:visibilityGone="@{!viewModel.loadingPassword.get()}"
+                            android:onClick="@{(v) -> viewModel.changePassword()}"/>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

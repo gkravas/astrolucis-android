@@ -10,6 +10,7 @@ import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.services.repsonses.LoginResponse
 import com.astrolucis.utils.ErrorPresentation
+import com.astrolucis.utils.dialogs.AlertDialog
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.Observable
@@ -341,7 +342,7 @@ class LoginViewModelTest: BaseTest() {
 
         Assert.assertEquals(null, loginViewModel.actionsLiveData.value)
         Assert.assertEquals("test user wrong credentials",
-                ErrorPresentation(R.string.error_defaultTitle, R.string.error_invalidCredential),
+                ErrorPresentation(R.string.error_defaultTitle, R.string.error_invalidCredential, AlertDialog.LOGOUT_DIALOG_ID),
                 loginViewModel.messagesLiveData.value)
     }
 

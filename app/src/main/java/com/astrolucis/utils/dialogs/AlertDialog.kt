@@ -5,7 +5,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment
 import com.astrolucis.core.BaseViewModel
+import org.koin.android.architecture.ext.KoinFactory
 import java.io.Serializable
+import java.lang.RuntimeException
 import kotlin.reflect.KClass
 
 class AlertDialog: AppCompatDialogFragment() {
@@ -13,6 +15,7 @@ class AlertDialog: AppCompatDialogFragment() {
     data class Data<T: BaseViewModel>(val viewModelClass: KClass<T>) : Serializable
 
     companion object {
+        public const val LOGOUT_DIALOG_ID = "logoutDialogId";
         private const val TAG = "AlertDialog"
         private const val ID = "$TAG.id"
         private const val TITLE = "$TAG.title"
@@ -21,17 +24,18 @@ class AlertDialog: AppCompatDialogFragment() {
         private const val CANCEL = "$TAG.cancel"
         private const val DATA = "$TAG.data"
 
-        fun newInstance(id: String, data: Data<*>, title: CharSequence, message: CharSequence, ok: CharSequence,
-                        cancel: CharSequence): AlertDialog {
+        fun newInstance(id: String = "", data: Data<*>?, title: CharSequence = "", message: CharSequence = "",
+                        ok: CharSequence = "",
+                        cancel: CharSequence = ""): AlertDialog {
 
             return AlertDialog().also {
                 it.arguments = Bundle().apply {
-                    this.putCharSequence(ID, id ?: "")
-                    this.putCharSequence(TITLE, title ?: "")
-                    this.putCharSequence(MESSAGE, message ?: "")
-                    this.putCharSequence(OK, ok ?: "")
-                    this.putCharSequence(CANCEL, cancel ?: "")
-                    this.putSerializable(DATA, data ?: "")
+                    this.putCharSequence(ID, id)
+                    this.putCharSequence(TITLE, title)
+                    this.putCharSequence(MESSAGE, message)
+                    this.putCharSequence(OK, ok)
+                    this.putCharSequence(CANCEL, cancel)
+                    this.putSerializable(DATA, data)
                 }
             }
         }
@@ -44,7 +48,12 @@ class AlertDialog: AppCompatDialogFragment() {
 
         val data = arguments!![DATA]
         if (data is Data<*>) {
-            viewModel = ViewModelProviders.of(requireActivity()).get(data.viewModelClass.java)
+            viewModel = try {
+                ViewModelProviders.of(requireActivity(), KoinFactory)[data.viewModelClass.java]
+            } catch (e: RuntimeException) {
+                ViewModelProviders.of(this, KoinFactory)[data.viewModelClass.java]
+            }
+
         }
     }
 
@@ -63,18 +72,20 @@ class AlertDialog: AppCompatDialogFragment() {
             val okLemma = it[OK] as String
             if (okLemma.isNotEmpty()) {
                 builder.setPositiveButton(okLemma) { _, _ ->
-                    viewModel.onDialogAction(id, true)
+                    this.targetFragment?.activity?.runOnUiThread({
+                        viewModel.onDialogAction(id, true)
+                    })
                 }
             }
             val cancelLemma = it[CANCEL] as String
             if (cancelLemma.isNotEmpty()) {
                 builder.setNegativeButton(cancelLemma) { _, _ ->
-                    viewModel.onDialogAction(id, false)
+                    this.targetFragment?.activity?.runOnUiThread({
+                        viewModel.onDialogAction(id, false)
+                    })
                 }
             }
         }
         return builder.create()
     }
-
-
 }

@@ -9,12 +9,16 @@ import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentNatalDateBinding
+import com.astrolucis.features.home.HomeActivity
 import com.astrolucis.utils.dialogs.AlertDialog
+import com.astrolucis.utils.routing.AppRouter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import org.koin.android.architecture.ext.viewModel
+import org.koin.android.ext.android.inject
 import java.util.*
 
 
@@ -27,15 +31,20 @@ class NatalDateFragment : BaseFragment() {
 
     lateinit var binding: FragmentNatalDateBinding
     val viewModel: NatalDateViewModel by viewModel()
+    val appRouter: AppRouter by inject()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        viewModel.stateChanged.observe(this, android.arch.lifecycle.Observer {
+
+        setActionBarTitle(R.string.drawer_menu_natalDate);
+
+        viewModel.actionsLiveData.observe(this, android.arch.lifecycle.Observer {
             when (it) {
-                NatalDateViewModel.ViewState.OPEN_DATE_PICKER -> openDatePicker()
-                NatalDateViewModel.ViewState.OPEN_TIME_PICKER -> openTimePicker()
-                NatalDateViewModel.ViewState.OPEN_TYPE_PICKER -> openTypePicker()
-                NatalDateViewModel.ViewState.SAVE_COMPLETE -> saveComplete()
+                NatalDateViewModel.Action.OPEN_DATE_PICKER -> openDatePicker()
+                NatalDateViewModel.Action.OPEN_TIME_PICKER -> openTimePicker()
+                NatalDateViewModel.Action.OPEN_TYPE_PICKER -> openTypePicker()
+                NatalDateViewModel.Action.SAVE_COMPLETE -> goToHome()
+                NatalDateViewModel.Action.GO_TO_HOME -> appRouter.goTo(HomeActivity::class, baseActivity)
             }
         })
         viewModel.messagesLiveData.observe(this, android.arch.lifecycle.Observer {
@@ -95,7 +104,7 @@ class NatalDateFragment : BaseFragment() {
         binding.typeAutoComplete.showDropDown()
     }
 
-    private fun saveComplete() {
-
+    private fun goToHome() {
+        appRouter.goTo(HomeActivity::class, baseActivity)
     }
 }

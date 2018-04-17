@@ -4,6 +4,7 @@ import com.astrolucis.R
 import com.astrolucis.exceptions.GraphQLException
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.UserService
+import com.astrolucis.utils.dialogs.AlertDialog
 import org.json.JSONObject
 import retrofit2.HttpException
 
@@ -30,7 +31,9 @@ class ErrorHandler {
             if (throwable is HttpException) {
                 val httpCode = throwable.code()
                 when (httpCode) {
-                    401 -> result = ErrorPresentation(R.string.error_defaultTitle, R.string.error_invalidCredential)
+                    401 -> result = ErrorPresentation(R.string.error_defaultTitle,
+                                        R.string.error_invalidCredential,
+                                        AlertDialog.LOGOUT_DIALOG_ID)
                     400 -> {
                         val json = JSONObject(throwable.response().errorBody()?.string()).optJSONObject(ERROR)
                         when (json.optString(NAME, NO_VALUE)) {

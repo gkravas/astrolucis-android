@@ -13,6 +13,9 @@ import io.reactivex.Observable
 class UserService(private val restService: RestService,
                   private val graphQLService: GraphQLService,
                   private val preferences: Preferences): com.astrolucis.services.interfaces.UserService {
+    override fun changeEmail(email: String): Observable<String> {
+        return restService.authenticationAPI.changeEmail(email)
+    }
 
     override fun register(email: String, password: String): Observable<String> {
         return restService.authenticationAPI.register(email, password)

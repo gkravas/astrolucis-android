@@ -15,6 +15,7 @@ import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.utils.ErrorHandler
 import com.astrolucis.utils.ErrorPresentation
+import com.astrolucis.utils.dialogs.AlertDialog.Companion.LOGOUT_DIALOG_ID
 import com.astrolucis.utils.validators.EmptyValidator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -28,13 +29,15 @@ class NatalDateViewModel : BaseViewModel {
 
     companion object {
         const val DEFAULT_NAME: String = "me"
+        const val SAVE_COMPLETE_DIALOG_ID: String = "saveCompleteDialogId"
     }
 
-    enum class ViewState {
+    enum class Action {
         OPEN_DATE_PICKER,
         OPEN_TIME_PICKER,
         OPEN_TYPE_PICKER,
-        SAVE_COMPLETE
+        SAVE_COMPLETE,
+        GO_TO_HOME
     }
 
     val userService: UserService
@@ -55,10 +58,9 @@ class NatalDateViewModel : BaseViewModel {
     val birthTimeError: ObservableField<CharSequence>
     val loading: ObservableField<Boolean>
 
-    val stateChanged: MutableLiveData<ViewState> = MutableLiveData()
-
     val disposables = CompositeDisposable()
 
+    val actionsLiveData: MutableLiveData<Action> = MutableLiveData()
     val messagesLiveData: MutableLiveData<ErrorPresentation> = MutableLiveData()
 
     constructor(application: Application, userService: UserService, natalDateService: NatalDateService, preferences: Preferences) : super(application) {
@@ -201,15 +203,15 @@ class NatalDateViewModel : BaseViewModel {
     }
 
     fun openDatePicker() {
-        stateChanged.value = ViewState.OPEN_DATE_PICKER
+        actionsLiveData.value = Action.OPEN_DATE_PICKER
     }
 
     fun openTimePicker() {
-        stateChanged.value = ViewState.OPEN_TIME_PICKER
+        actionsLiveData.value = Action.OPEN_TIME_PICKER
     }
 
     fun openTypePicker() {
-        stateChanged.value = ViewState.OPEN_TYPE_PICKER
+        actionsLiveData.value = Action.OPEN_TYPE_PICKER
     }
 
     private fun parseServerDate(date: String): Date? {
@@ -244,7 +246,7 @@ class NatalDateViewModel : BaseViewModel {
         val birthLocation = birthLocationField.get().toString()
         val name = nameField.get().toString()
         val type: String = NatalType.findBy(typeField.get().toString(), getApplication<App>().applicationContext)?.value ?: ""
-
+""
         val createUpdateNatalDate = if (id == null) {
             natalDateService.createNatalDateMutation(date, birthLocation, name, true, type)
         } else {
@@ -257,8 +259,9 @@ class NatalDateViewModel : BaseViewModel {
                 .doOnSubscribe({ loading.set(true) })
                 .subscribe(
                         {
-                            stateChanged.value = ViewState.SAVE_COMPLETE
-                            livingLocationField.get()
+                            messagesLiveData.value = ErrorPresentation(R.string.success_defaultTitle,
+                                    R.string.natalDate_natalDateSaveComplete_text,
+                                    SAVE_COMPLETE_DIALOG_ID)
                             showNatalDate(livingLocationField.get().toString(), it)
                             loading.set(false)
                         },
@@ -268,5 +271,12 @@ class NatalDateViewModel : BaseViewModel {
                         }
                 )
         )
+    }
+
+    override fun onDialogAction(id: String, positive: Boolean) {
+        when (id) {
+            LOGOUT_DIALOG_ID -> actionsLiveData.value = Action.GO_TO_HOME
+            SAVE_COMPLETE_DIALOG_ID -> actionsLiveData.value = Action.SAVE_COMPLETE
+        }
     }
 }

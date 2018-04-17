@@ -263,6 +263,9 @@ class NatalDateViewModelTest: BaseTest() {
         natalDateViewModel.birthTimeField.set(VALID_BIRTH_TIME)
         natalDateViewModel.birthTimeField.notifyChange()
 
+        natalDateViewModel.typeField.set(resources.getText(NatalType.findBy(VALID_TYPE)?.resourceId!!))
+        natalDateViewModel.typeField.notifyChange()
+
         //test if it is not loading initially
         Assert.assertEquals(false, natalDateViewModel.loading.get())
 
@@ -280,6 +283,13 @@ class NatalDateViewModelTest: BaseTest() {
         Assert.assertEquals(VALID_BIRTH_LOCATION, natalDateViewModel.birthLocationField.get())
         Assert.assertEquals(VALID_BIRTH_DATE, natalDateViewModel.birthDateField.get())
         Assert.assertEquals(VALID_BIRTH_TIME, natalDateViewModel.birthTimeField.get())
+
+        Assert.assertEquals(ErrorPresentation(R.string.success_defaultTitle,
+                                R.string.natalDate_natalDateSaveComplete_text,
+                                NatalDateViewModel.SAVE_COMPLETE_DIALOG_ID), natalDateViewModel.messagesLiveData.value)
+
+        natalDateViewModel.onDialogAction(NatalDateViewModel.SAVE_COMPLETE_DIALOG_ID, true)
+        Assert.assertEquals(NatalDateViewModel.Action.SAVE_COMPLETE, natalDateViewModel.actionsLiveData.value)
     }
 
     //FORM INITIALIZATION

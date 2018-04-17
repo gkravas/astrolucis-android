@@ -85,12 +85,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.core:core-ktx:0.2'
+    implementation 'androidx.core:core-ktx:0.3'
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    kapt 'com.android.databinding:compiler:3.1.0'
+    kapt 'com.android.databinding:compiler:3.1.1'
 
-    String koin_version = '0.9.1'
+    String koin_version = '0.9.2'
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-architecture:$koin_version"
 

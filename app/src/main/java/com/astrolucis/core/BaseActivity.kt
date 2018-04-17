@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 open class BaseActivity : AppCompatActivity() {
 
     companion object {
-        private const val backStack = "backStack"
+        private const val BACK_STACK = "backStack"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +31,14 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun startWithFragment(fragment: BaseFragment) {
+        if (!isBackStackEmpty()) {
+            pushFragment(fragment)
+            return
+        }
         val tag = System.currentTimeMillis().toString()
         supportFragmentManager
                 .beginTransaction()
+                .addToBackStack(BACK_STACK)
                 .add(getMasterContainerId(), fragment, tag)
                 .addToBackStack(tag)
                 .commit()
@@ -43,6 +48,7 @@ open class BaseActivity : AppCompatActivity() {
         val tag = System.currentTimeMillis().toString()
         supportFragmentManager
                 .beginTransaction()
+                .addToBackStack(BACK_STACK)
                 .replace(getMasterContainerId(), fragment, tag)
                 .addToBackStack(tag)
                 .commit()
@@ -66,9 +72,9 @@ open class BaseActivity : AppCompatActivity() {
                 .popBackStackImmediate(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
-    fun popAllFragment() {
+    fun popAllFragments() {
         supportFragmentManager
-                .popBackStackImmediate(backStack, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                .popBackStackImmediate(BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     fun showAlertDialog(id: String, data: AlertDialog.Data<*>, @StringRes title: Int, @StringRes message: Int) {

@@ -58,7 +58,7 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
                     .subscribe(
                             { me ->
                                 params.clear()
-                                val intent: Intent = if (me != null) {
+                                val intent: Intent = if (me == null) {
                                     params.putBoolean(HomeActivity.OPEN_NATAL_DATE, true)
                                     Intent(fromActivity, HomeActivity::class.java).apply {
                                         putExtras(params)

@@ -7,6 +7,8 @@ import com.astrolucis.fragment.UserFragment
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
+import com.astrolucis.tests.utils.Constants.Companion.EXPIRED_JWT
+import com.astrolucis.tests.utils.Constants.Companion.NON_EXPIRING_JWT
 import com.astrolucis.utils.ErrorFactory
 import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.TrampolineSchedulerRule
@@ -35,9 +37,6 @@ class ResetPasswordViewModelTest: BaseTest() {
 
         const val INVALID_SHORT_PASSWORD: String = "12345"
         const val INVALID_LONG_PASSWORD: String = "012345678901234567891"
-
-        const val NON_EXPIRING_JWT: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBc3Ryb0x1Y2lzIiwiaWF0IjoxNTIxNzkwOTc3LCJleHAiOjI1MzE2MzQxODMsImF1ZCI6Imh0dHBzOi8vd3d3LmFzdHJvbHVjaXMuZ3IiLCJzdWIiOiJpbmZvQGFzdHJvbHVjaXMuZ3IifQ.s1Y2BU-TdCdQ83TcfC7kMV_BnZeqcby768F526cVPvg"
-        const val EXPIRED_JWT: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBc3Rybzp1Y2lzIiwiaWF0IjoxNTIxNTczMzUyLCJleHAiOjE1MjE2NTk3NjYsImF1ZCI6Imh0dHBzOi8vd3d3LmFzdHJvbHVjaXMuZ3IiLCJzdWIiOiJ0ZXN0QGFzdHJvbHVjaXMuZ3IifQ.OiJ7djzghA1I4jvASoYSOx1wvMzJwWi9QDeCYWel36g"
 
     }
 
@@ -69,78 +68,78 @@ class ResetPasswordViewModelTest: BaseTest() {
 
     @Test
     fun test_password_empty() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordField.set(LoginViewModelTest.EMPTY)
-        loginViewModel.passwordField.notifyChange()
-        Assert.assertEquals(resources.getText(R.string.login_password_emptyError), loginViewModel.passwordError.get())
+        resetPasswordViewModel.passwordField.set(LoginViewModelTest.EMPTY)
+        resetPasswordViewModel.passwordField.notifyChange()
+        Assert.assertEquals(resources.getText(R.string.login_password_emptyError), resetPasswordViewModel.passwordError.get())
     }
 
     @Test
     fun test_password_less_than_six() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordField.set(LoginViewModelTest.INVALID_SHORT_PASSWORD)
-        loginViewModel.passwordField.notifyChange()
-        Assert.assertEquals(resources.getText(R.string.login_password_validationError), loginViewModel.passwordError.get())
+        resetPasswordViewModel.passwordField.set(LoginViewModelTest.INVALID_SHORT_PASSWORD)
+        resetPasswordViewModel.passwordField.notifyChange()
+        Assert.assertEquals(resources.getText(R.string.login_password_validationError), resetPasswordViewModel.passwordError.get())
     }
 
     @Test
     fun test_password_more_than_twenty() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordField.set(LoginViewModelTest.INVALID_LONG_PASSWORD)
-        loginViewModel.passwordField.notifyChange()
-        Assert.assertEquals(resources.getText(R.string.login_password_validationError), loginViewModel.passwordError.get())
+        resetPasswordViewModel.passwordField.set(LoginViewModelTest.INVALID_LONG_PASSWORD)
+        resetPasswordViewModel.passwordField.notifyChange()
+        Assert.assertEquals(resources.getText(R.string.login_password_validationError), resetPasswordViewModel.passwordError.get())
     }
 
     @Test
     fun test_password_valid() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordField.set(LoginViewModelTest.VALID_PASSWORD)
-        loginViewModel.passwordField.notifyChange()
-        Assert.assertEquals("", loginViewModel.passwordError.get())
+        resetPasswordViewModel.passwordField.set(LoginViewModelTest.VALID_PASSWORD)
+        resetPasswordViewModel.passwordField.notifyChange()
+        Assert.assertEquals("", resetPasswordViewModel.passwordError.get())
     }
 
     @Test
     fun test_password_repeat_empty() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordRepeatField.set(LoginViewModelTest.EMPTY)
-        loginViewModel.passwordRepeatField.notifyChange()
-        Assert.assertEquals(resources.getText(R.string.login_password_emptyError), loginViewModel.passwordRepeatError.get())
+        resetPasswordViewModel.passwordRepeatField.set(LoginViewModelTest.EMPTY)
+        resetPasswordViewModel.passwordRepeatField.notifyChange()
+        Assert.assertEquals(resources.getText(R.string.login_password_emptyError), resetPasswordViewModel.passwordRepeatError.get())
     }
 
     @Test
     fun test_password_repeat_not_equal_to_password() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordField.set(LoginViewModelTest.VALID_PASSWORD)
-        loginViewModel.passwordField.notifyChange()
+        resetPasswordViewModel.passwordField.set(LoginViewModelTest.VALID_PASSWORD)
+        resetPasswordViewModel.passwordField.notifyChange()
 
-        loginViewModel.passwordRepeatField.set(LoginViewModelTest.INVALID_SHORT_PASSWORD)
-        loginViewModel.passwordRepeatField.notifyChange()
-        Assert.assertEquals(resources.getText(R.string.login_passwordRepeat_equalError), loginViewModel.passwordRepeatError.get())
+        resetPasswordViewModel.passwordRepeatField.set(LoginViewModelTest.INVALID_SHORT_PASSWORD)
+        resetPasswordViewModel.passwordRepeatField.notifyChange()
+        Assert.assertEquals(resources.getText(R.string.login_passwordRepeat_equalError), resetPasswordViewModel.passwordRepeatError.get())
     }
 
     @Test
     fun test_password_repeat_equal_to_password() {
-        val loginViewModel = initViewModel(initUserService(), initNatalDateService(),
+        val resetPasswordViewModel = initViewModel(initUserService(), initNatalDateService(),
                 initPreferences(NON_EXPIRING_JWT))
 
-        loginViewModel.passwordField.set(LoginViewModelTest.VALID_PASSWORD)
-        loginViewModel.passwordField.notifyChange()
+        resetPasswordViewModel.passwordField.set(LoginViewModelTest.VALID_PASSWORD)
+        resetPasswordViewModel.passwordField.notifyChange()
 
-        loginViewModel.passwordRepeatField.set(LoginViewModelTest.VALID_PASSWORD)
-        loginViewModel.passwordRepeatField.notifyChange()
-        Assert.assertEquals("", loginViewModel.passwordError.get())
+        resetPasswordViewModel.passwordRepeatField.set(LoginViewModelTest.VALID_PASSWORD)
+        resetPasswordViewModel.passwordRepeatField.notifyChange()
+        Assert.assertEquals("", resetPasswordViewModel.passwordError.get())
     }
 
     @Test
