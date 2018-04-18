@@ -1,5 +1,7 @@
-package com.astrolucis
+package com.astrolucis.tests.viewModels
 
+import com.astrolucis.*
+import com.astrolucis.core.BaseTest
 import com.astrolucis.features.natalDate.NatalDateViewModel
 import com.astrolucis.fragment.NatalDateFragment
 import com.astrolucis.fragment.UserFragment
@@ -8,7 +10,9 @@ import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.type.natalDatetypeEnumType
+import com.astrolucis.utils.ErrorFactory
 import com.astrolucis.utils.ErrorPresentation
+import com.astrolucis.utils.TrampolineSchedulerRule
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.Observable
@@ -247,9 +251,6 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(false),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        val listener = mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
-        natalDateViewModel.loading.addOnPropertyChangedCallback(listener)
-
         natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
@@ -262,12 +263,18 @@ class NatalDateViewModelTest: BaseTest() {
         natalDateViewModel.birthTimeField.set(VALID_BIRTH_TIME)
         natalDateViewModel.birthTimeField.notifyChange()
 
+        natalDateViewModel.typeField.set(resources.getText(NatalType.findBy(VALID_TYPE)?.resourceId!!))
+        natalDateViewModel.typeField.notifyChange()
+
         //test if it is not loading initially
         Assert.assertEquals(false, natalDateViewModel.loading.get())
 
-        natalDateViewModel.save()
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
+        val listener = mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        natalDateViewModel.loading.addOnPropertyChangedCallback(listener)
+
+        natalDateViewModel.save()
         verify(listener, times(2)).onPropertyChanged(natalDateViewModel.loading, BR._all)
 
         //test if it is not loading at the end of the goal
@@ -276,6 +283,13 @@ class NatalDateViewModelTest: BaseTest() {
         Assert.assertEquals(VALID_BIRTH_LOCATION, natalDateViewModel.birthLocationField.get())
         Assert.assertEquals(VALID_BIRTH_DATE, natalDateViewModel.birthDateField.get())
         Assert.assertEquals(VALID_BIRTH_TIME, natalDateViewModel.birthTimeField.get())
+
+        Assert.assertEquals(ErrorPresentation(R.string.success_defaultTitle,
+                                R.string.natalDate_natalDateSaveComplete_text,
+                                NatalDateViewModel.SAVE_COMPLETE_DIALOG_ID), natalDateViewModel.messagesLiveData.value)
+
+        natalDateViewModel.onDialogAction(NatalDateViewModel.SAVE_COMPLETE_DIALOG_ID, true)
+        Assert.assertEquals(NatalDateViewModel.Action.SAVE_COMPLETE, natalDateViewModel.actionsLiveData.value)
     }
 
     //FORM INITIALIZATION

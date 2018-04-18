@@ -1,9 +1,10 @@
-package com.astrolucis
+package com.astrolucis.tests.utils
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.astrolucis.core.BaseActivity
+import com.astrolucis.core.BaseTest
 import com.astrolucis.features.home.HomeActivity
 import com.astrolucis.features.login.LoginActivity
 import com.astrolucis.features.resetPassword.ResetPasswordActivity
@@ -11,20 +12,20 @@ import com.astrolucis.fragment.NatalDateFragment
 import com.astrolucis.fragment.UserFragment
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
+import com.astrolucis.tests.utils.Constants.Companion.EXPIRED_JWT
+import com.astrolucis.tests.utils.Constants.Companion.NON_EXPIRING_JWT
 import com.astrolucis.type.natalDatetypeEnumType
+import com.astrolucis.utils.TrampolineSchedulerRule
 import com.astrolucis.utils.routing.AppRouter
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext.closeKoin
-import org.koin.test.KoinTest
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -35,8 +36,7 @@ import java.util.*
 class AppRouterTest: BaseTest() {
 
     companion object {
-        const val NON_EXPIRING_JWT: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBc3Ryb0x1Y2lzIiwiaWF0IjoxNTIxNzkwOTc3LCJleHAiOjI1MzE2MzQxODMsImF1ZCI6Imh0dHBzOi8vd3d3LmFzdHJvbHVjaXMuZ3IiLCJzdWIiOiJpbmZvQGFzdHJvbHVjaXMuZ3IifQ.s1Y2BU-TdCdQ83TcfC7kMV_BnZeqcby768F526cVPvg"
-        const val EXPIRED_JWT: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBc3Rybzp1Y2lzIiwiaWF0IjoxNTIxNTczMzUyLCJleHAiOjE1MjE2NTk3NjYsImF1ZCI6Imh0dHBzOi8vd3d3LmFzdHJvbHVjaXMuZ3IiLCJzdWIiOiJ0ZXN0QGFzdHJvbHVjaXMuZ3IifQ.OiJ7djzghA1I4jvASoYSOx1wvMzJwWi9QDeCYWel36g"
+        const val RESET_PASSWORD_URI: String = "https://wwww.astrolucis.gr${AppRouter.RESET_PASSWORD}?t="
     }
 
     @get:Rule
@@ -158,4 +158,25 @@ class AppRouterTest: BaseTest() {
         val shadowIntent = shadowOf(startedIntent)
         assertEquals(LoginActivity::class.java, shadowIntent.intentClass)
     }
+
+    /*
+    ToDo: I have to find a way to mock KeyStore via robolectric
+    @Test
+    fun test_go_to_reset_password_non_expired_jwt_token() {
+        //app routers setup doesn't matter, it first checks for reset password
+        appRouter = AppRouter(initPreferences(Preferences.EMPTY_STRING), initNatalDateService(false))
+
+        val activityController = Robolectric.buildActivity(SplashActivity::class.java)
+                .create()
+                .newIntent(Intent().apply {
+                    this.data = Uri.parse(RESET_PASSWORD_URI + NON_EXPIRING_JWT)
+                })
+                .start()
+        val activity = activityController.get()
+        activityController.start()
+
+        val startedIntent = shadowOf(activity).nextStartedActivity
+        val shadowIntent = shadowOf(startedIntent)
+        assertEquals(ResetPasswordActivity::class.java, shadowIntent.intentClass)
+    }*/
 }

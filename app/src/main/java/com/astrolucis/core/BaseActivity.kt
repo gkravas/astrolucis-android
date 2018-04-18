@@ -2,16 +2,17 @@ package com.astrolucis.core
 
 import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import com.astrolucis.R
+import com.astrolucis.utils.ErrorPresentation
+import com.astrolucis.utils.dialogs.AlertDialog
+import kotlin.reflect.KClass
 
 open class BaseActivity : AppCompatActivity() {
 
     companion object {
-        private const val backStack = "backStack"
+        private const val BACK_STACK = "backStack"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +31,14 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun startWithFragment(fragment: BaseFragment) {
+        if (!isBackStackEmpty()) {
+            pushFragment(fragment)
+            return
+        }
         val tag = System.currentTimeMillis().toString()
         supportFragmentManager
                 .beginTransaction()
+                .addToBackStack(BACK_STACK)
                 .add(getMasterContainerId(), fragment, tag)
                 .addToBackStack(tag)
                 .commit()
@@ -42,6 +48,7 @@ open class BaseActivity : AppCompatActivity() {
         val tag = System.currentTimeMillis().toString()
         supportFragmentManager
                 .beginTransaction()
+                .addToBackStack(BACK_STACK)
                 .replace(getMasterContainerId(), fragment, tag)
                 .addToBackStack(tag)
                 .commit()
@@ -65,23 +72,21 @@ open class BaseActivity : AppCompatActivity() {
                 .popBackStackImmediate(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
-    fun popAllFragment() {
+    fun popAllFragments() {
         supportFragmentManager
-                .popBackStackImmediate(backStack, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                .popBackStackImmediate(BACK_STACK, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
-    fun showAlertDialog(@StringRes title: Int, @StringRes message: Int) {
-        return showAlertDialog(resources.getText(title), resources.getText(message))
+    fun showAlertDialog(id: String, data: AlertDialog.Data<*>, @StringRes title: Int, @StringRes message: Int) {
+        showAlertDialog(id, data, resources.getText(title), resources.getText(message))
     }
 
-    fun showAlertDialog(title: CharSequence, message: CharSequence) {
+    fun showAlertDialog(id: String, data: AlertDialog.Data<*>, title: CharSequence, message: CharSequence) {
         runOnUiThread({
-            val ad = AlertDialog.Builder(this, R.style.AppTheme_Dialog)
-                    .setTitle(title)
-                    .setMessage(message)
-                    .setPositiveButton(android.R.string.ok) { dialog, which -> }
-                    .create()
-            ad.show()
+            AlertDialog.newInstance(id, data, title, message,
+                    resources.getString(android.R.string.ok),
+                    resources.getString(android.R.string.cancel))
+                    .show(supportFragmentManager, id)
         })
     }
 }

@@ -12,18 +12,17 @@ import com.astrolucis.features.resetPassword.ResetPasswordActivity
 import com.astrolucis.fragment.UserFragment
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
-import com.auth0.android.jwt.DecodeException
-import com.auth0.android.jwt.JWT
+import com.astrolucis.utils.JWTUtils
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.isSuperclassOf
 
 class AppRouter(private val preferences: Preferences, private val natalDateService: NatalDateService) {
 
     companion object {
-        const val minExpiredTimeSpan: Long = 60 * 60
         const val DELAY: Long = 1000
         const val NO_DELAY: Long = -1
         const val RESET_PASSWORD = "/resetPassword"
@@ -42,10 +41,15 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
         if (activityClass.isSuperclassOf(BaseActivity::class)) {
             throw RoutingException()
         }
-
         val delay: Long = if (finishCurrent) DELAY else NO_DELAY
 
-        if (!isLoggedIn(preferences.token)) {
+        if (activityClass.isSubclassOf(ResetPasswordActivity::class)) {
+            preferences.token = params[ResetPasswordActivity.TOKEN] as String
+            val intent: Intent = Intent(fromActivity, ResetPasswordActivity::class.java).apply {
+                putExtras(params)
+            }
+            startActivity(fromActivity, intent, delay)
+        } else if (!JWTUtils.isLoggedIn(preferences.token)) {
             startActivity(fromActivity, Intent(fromActivity, LoginActivity::class.java), delay)
         } else {
             getUserData()
@@ -54,17 +58,16 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
                     .subscribe(
                             { me ->
                                 params.clear()
-                                params.putBoolean(HomeActivity.openNatalDate, true)
-                                val intent: Intent =// if (me != null) {
+                                val intent: Intent = if (me == null) {
+                                    params.putBoolean(HomeActivity.OPEN_NATAL_DATE, true)
                                     Intent(fromActivity, HomeActivity::class.java).apply {
                                         putExtras(params)
                                     }
-//                                } else {
-//                                    Intent(fromActivity, activityClass.java).apply {
-//                                        putExtras(params)
-//                                    }
-//
-//                                }
+                                } else {
+                                    Intent(fromActivity, activityClass.java).apply {
+                                        putExtras(params)
+                                    }
+                                }
                                 startActivity(fromActivity, intent, delay)
                             },
                             {
@@ -78,20 +81,6 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
         fromActivity.startActivity(intent)
         if (delay != NO_DELAY) {
             Handler().postDelayed({ fromActivity.finish() }, delay)
-        }
-    }
-    private fun isLoggedIn(token: String): Boolean {
-        return try {
-            !JWT(token).isExpired(minExpiredTimeSpan)
-        } catch (e: Throwable) {
-            when(e) {
-                is DecodeException,
-                is NullPointerException -> {
-                    return false
-                } else -> {
-                    throw  e
-                }
-            }
         }
     }
 

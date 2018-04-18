@@ -26,4 +26,16 @@ class HomeViewModel: BaseViewModel {
         userService.logout()
         viewState.value = ViewState.LOGOUT
     }
+
+    fun goToProfile() {
+        viewState.value = ViewState.PROFILE
+    }
+
+    fun goToNatalDate() {
+        viewState.value = ViewState.NATAL_DATE
+    }
+
+    fun goToDailyPrediction() {
+        viewState.value = ViewState.DAILY_PREDICTIONS
+    }
 }

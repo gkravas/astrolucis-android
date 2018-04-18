@@ -58,13 +58,27 @@
 
     <string name="natalDate.defaultTime">12:00</string>
     <string name="natalDate.defaultCountry">Ελλάδα</string>
+    <string name="natalDate.natalDateSaveComplete.text">Ο Γεννέθλιος σου χάρτη δημιουργήθηκε με επιτυχεία!</string>
 
+    <!-- RESET PASSWORD -->
+    <string name="resetPassword.changePasswordButton.text">Αλλαγή Κωδικού</string>
+
+    <!-- PROFILE -->
+    <string name="profile.changeEmailTitle.text">Αλλαγή email</string>
+    <string name="profile.changePasswordTitle.text">Αλλαγή κωδικού πρόσβασης</string>
+    <string name="profile.changeEmailButton.text">Αλλαγή email</string>
+    <string name="profile.changePasswordButton.text">Αλλαγή Κωδικού</string>
+    <string name="profile.changeEmailSuccess.text">Το νέο σας e-mail καταχωρήθηκε με επιτυχία!</string>
+    <string name="profile.changePasswordSuccess.text">O νέος σας κωδικός καταχωρήθηκε με επιτυχία!</string>
+
+    <!-- MENU -->
     <string name="drawer.menu.profile">Το Προφίλ μου</string>
     <string name="drawer.menu.natalDate">Ο Γεννέθλιος Χάρτης μου</string>
     <string name="drawer.menu.dailyPredictions">Ημερήσιες Προβλέψεις</string>
     <string name="drawer.menu.blog">Αστρολογία</string>
     <string name="drawer.menu.logout">Έξοδος</string>
 
+    <string name="success.defaultTitle">Επιτυχία</string>
     <!-- ERRORS -->
     <string name="error.defaultTitle">Προσοχή</string>
     <string name="error.invalidCredential">Το email ή ο κωδικός πρόσβασης δεν είναι σωστά!</string>
@@ -73,5 +87,6 @@
     <string name="error.invalidLivingLocation">Δεν βρέθηκε ο τόπος κατοικίας σου, πάντα σύμφωνα με την google… :) </string>
     <string name="error.invalidBirthLocation">Δεν βρέθηκε ο τόπος γέννησης σου, πάντα σύμφωνα με την google… :)</string>
     <string name="error.invalidBirthDate">Η ημερομηνία ή ώρα γεννησης έχει λάθος μορφή</string>
+    <string name="error.resetPassword.tokenExpired">Δυστυχώς περάσανε τα 30 λεπτά που είχες για να αλλάξεις τον κωδικό σου.\nΠήγαινε ξανά στο ξέχασα τον κωδικό μου.</string>
     <string name="error.general">Υπήρξε κάποιο πρόβλημα επικοινωνίας με τον ψηφιακό αστρολόγο… Δοκίμασε πάλι σε λιγάκι!</string>
 </resources>

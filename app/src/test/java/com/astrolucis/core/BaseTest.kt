@@ -1,4 +1,4 @@
-package com.astrolucis
+package com.astrolucis.core
 
 import android.content.res.Resources
 import com.astrolucis.fragment.UserFragment
@@ -11,7 +11,8 @@ import org.robolectric.RuntimeEnvironment
 open class BaseTest: KoinTest {
     val resources: Resources get() = RuntimeEnvironment.application.resources
 
-    fun initPreferences(token: String, userFragment: UserFragment? = null): Preferences {
+    fun initPreferences(token: String = Preferences.EMPTY_STRING,
+                        userFragment: UserFragment? = null): Preferences {
         val preferences: Preferences = mock {
         }
 

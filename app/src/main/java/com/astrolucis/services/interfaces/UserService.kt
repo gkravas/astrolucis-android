@@ -1,6 +1,5 @@
 package com.astrolucis.services.interfaces
 
-import com.astrolucis.UpdateUserMutation
 import com.astrolucis.fragment.UserFragment
 import com.astrolucis.services.repsonses.LoginResponse
 import io.reactivex.Observable
@@ -16,6 +15,7 @@ interface UserService {
     fun fbLogin(fbToken: String): Observable<LoginResponse>
     fun sendResetEmail(email: String): Observable<String>
     fun resetPassword(password: String): Observable<String>
+    fun changeEmail(email: String): Observable<String>
     fun updateLivingLocation(livingLocation: String): Observable<UserFragment?>
     fun logout()
 }

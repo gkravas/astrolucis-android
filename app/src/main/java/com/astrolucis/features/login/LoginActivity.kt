@@ -12,6 +12,7 @@ import com.astrolucis.R
 import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.ActivityLoginBinding
 import com.astrolucis.features.home.HomeActivity
+import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -54,7 +55,7 @@ class LoginActivity : BaseActivity() {
 
         viewModel.messagesLiveData.observe(this, Observer {
             it?.let {
-                showAlertDialog(it.titleResId, it.messageResId)
+                showAlertDialog(it.dialogId, AlertDialog.Data(viewModel::class), it.titleResId, it.messageResId)
             }
         })
 

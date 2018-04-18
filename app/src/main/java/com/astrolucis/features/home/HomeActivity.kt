@@ -15,6 +15,7 @@ import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.ActivityHomeBinding
 import com.astrolucis.features.login.LoginActivity
 import com.astrolucis.features.natalDate.NatalDateFragment
+import com.astrolucis.features.profile.ProfileFragment
 import com.astrolucis.utils.routing.AppRouter
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
@@ -24,7 +25,7 @@ class HomeActivity: BaseActivity() {
 
 
     companion object {
-        const val openNatalDate = "openNatalDate"
+        const val OPEN_NATAL_DATE = "OPEN_NATAL_DATE"
     }
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -42,10 +43,10 @@ class HomeActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
+        setSupportActionBar(binding.toolbar?.toolbar)
+
         binding.viewModel = viewModel
         binding.executePendingBindings()
-
-        setSupportActionBar(binding.toolbar?.toolbar)
 
         drawerToggle = setupDrawerToggle()
         binding.drawerLayout.addDrawerListener(drawerToggle)
@@ -59,30 +60,39 @@ class HomeActivity: BaseActivity() {
 
         viewModel.viewState.observeForever( { viewState: HomeViewModel.ViewState? ->
             when (viewState) {
-                HomeViewModel.ViewState.PROFILE -> startWithFragment(NatalDateFragment())
-                HomeViewModel.ViewState.NATAL_DATE -> startWithFragment(NatalDateFragment())
-                HomeViewModel.ViewState.DAILY_PREDICTIONS -> startWithFragment(NatalDateFragment())
+                HomeViewModel.ViewState.PROFILE -> {
+                    startWithFragment(ProfileFragment())
+                    binding.navigation.post({ binding.navigation.setCheckedItem(R.id.profile_menu_item) })
+                }
+                HomeViewModel.ViewState.NATAL_DATE -> {
+                    startWithFragment(NatalDateFragment())
+                    binding.navigation.post({ binding.navigation.setCheckedItem(R.id.natal_date_menu_item) })
+                }
+                HomeViewModel.ViewState.DAILY_PREDICTIONS -> {
+                    startWithFragment(NatalDateFragment())
+                    binding.navigation.post({ binding.navigation.setCheckedItem(R.id.daily_prediction_menu_item) })
+                }
                 HomeViewModel.ViewState.LOGOUT -> appRouter.goTo(LoginActivity::class, this)
             }
         })
 
         binding.navigation.setNavigationItemSelectedListener({
             when (it.itemId) {
-                R.id.logout_menu_item -> {
-                    viewModel.logout()
-                }
+                R.id.logout_menu_item -> viewModel.logout()
+                R.id.profile_menu_item -> viewModel.goToProfile()
+                R.id.natal_date_menu_item -> viewModel.goToNatalDate()
+                R.id.daily_prediction_menu_item -> viewModel.goToDailyPrediction()
             }
-            it.isChecked = true
             binding.drawerLayout.closeDrawers()
             true
         })
     }
 
     override fun parseState(state: Bundle) {
-        viewModel.viewState.value = if (state.getBoolean(openNatalDate, false)) {
+        viewModel.viewState.value = if (state.getBoolean(OPEN_NATAL_DATE, false)) {
             HomeViewModel.ViewState.NATAL_DATE
         } else {
-            HomeViewModel.ViewState.DAILY_PREDICTIONS
+            HomeViewModel.ViewState.PROFILE
         }
     }
 

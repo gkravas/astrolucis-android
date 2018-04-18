@@ -1,11 +1,16 @@
-package com.astrolucis
+package com.astrolucis.tests.viewModels
 
+import com.astrolucis.core.BaseTest
+import com.astrolucis.utils.ErrorFactory
+import com.astrolucis.R
+import com.astrolucis.utils.TrampolineSchedulerRule
 import com.astrolucis.features.login.LoginViewModel
 import com.astrolucis.models.User
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.services.repsonses.LoginResponse
 import com.astrolucis.utils.ErrorPresentation
+import com.astrolucis.utils.dialogs.AlertDialog
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.Observable
@@ -337,7 +342,7 @@ class LoginViewModelTest: BaseTest() {
 
         Assert.assertEquals(null, loginViewModel.actionsLiveData.value)
         Assert.assertEquals("test user wrong credentials",
-                ErrorPresentation(R.string.error_defaultTitle, R.string.error_invalidCredential),
+                ErrorPresentation(R.string.error_defaultTitle, R.string.error_invalidCredential, AlertDialog.LOGOUT_DIALOG_ID),
                 loginViewModel.messagesLiveData.value)
     }
 
@@ -392,7 +397,7 @@ class LoginViewModelTest: BaseTest() {
     }
 
     @Test
-    fun test_register_empty_email_will_fail() {
+    fun test_register_empty_email_should_fail() {
         val loginViewModel = initViewModel(initUserService(),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 

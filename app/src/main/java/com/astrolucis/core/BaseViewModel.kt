@@ -5,4 +5,7 @@ import android.arch.lifecycle.AndroidViewModel
 
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
+    open fun onDialogAction(id: String, positive: Boolean) {
+
+    }
 }
