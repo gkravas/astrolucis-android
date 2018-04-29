@@ -36,7 +36,7 @@ class NatalDateFragment : BaseFragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        setActionBarTitle(R.string.drawer_menu_natalDate);
+        setActionBarTitle(R.string.drawer_menu_natalDate)
 
         viewModel.actionsLiveData.observe(this, android.arch.lifecycle.Observer {
             when (it) {

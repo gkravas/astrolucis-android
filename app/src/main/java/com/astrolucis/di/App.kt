@@ -1,6 +1,7 @@
 package com.astrolucis.di
 
 import android.app.Application
+import com.astrolucis.features.dailyPredictionList.DailyPredictionListViewModel
 import com.astrolucis.services.*
 import com.astrolucis.features.home.HomeViewModel
 import com.astrolucis.features.login.LoginViewModel
@@ -36,6 +37,7 @@ class App : Application() {
         viewModel { NatalDateViewModel(get(), get(), get(), get()) }
         viewModel { ResetPasswordViewModel(get(), get(), get(), get()) }
         viewModel { ProfileViewModel(get(), get(), get()) }
+        viewModel { DailyPredictionListViewModel(get()) }
     }
 
     companion object {

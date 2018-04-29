@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.astrolucis.R
 import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.ActivityHomeBinding
+import com.astrolucis.features.dailyPredictionList.DailyPredictionListFragment
 import com.astrolucis.features.login.LoginActivity
 import com.astrolucis.features.natalDate.NatalDateFragment
 import com.astrolucis.features.profile.ProfileFragment
@@ -68,8 +69,8 @@ class HomeActivity: BaseActivity() {
                     startWithFragment(NatalDateFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.natal_date_menu_item) })
                 }
-                HomeViewModel.ViewState.DAILY_PREDICTIONS -> {
-                    startWithFragment(NatalDateFragment())
+                HomeViewModel.ViewState.DAILY_PREDICTION_LIST -> {
+                    startWithFragment(DailyPredictionListFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.daily_prediction_menu_item) })
                 }
                 HomeViewModel.ViewState.LOGOUT -> appRouter.goTo(LoginActivity::class, this)
@@ -92,7 +93,7 @@ class HomeActivity: BaseActivity() {
         viewModel.viewState.value = if (state.getBoolean(OPEN_NATAL_DATE, false)) {
             HomeViewModel.ViewState.NATAL_DATE
         } else {
-            HomeViewModel.ViewState.PROFILE
+            HomeViewModel.ViewState.DAILY_PREDICTION_LIST
         }
     }
 
