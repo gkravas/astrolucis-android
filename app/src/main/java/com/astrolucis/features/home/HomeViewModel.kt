@@ -10,7 +10,7 @@ class HomeViewModel: BaseViewModel {
     enum class ViewState {
         PROFILE,
         NATAL_DATE,
-        DAILY_PREDICTIONS,
+        DAILY_PREDICTION_LIST,
         LOGOUT;
     }
 
@@ -36,6 +36,6 @@ class HomeViewModel: BaseViewModel {
     }
 
     fun goToDailyPrediction() {
-        viewState.value = ViewState.DAILY_PREDICTIONS
+        viewState.value = ViewState.DAILY_PREDICTION_LIST
     }
 }

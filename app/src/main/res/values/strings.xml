@@ -71,6 +71,10 @@
     <string name="profile.changeEmailSuccess.text">Το νέο σας e-mail καταχωρήθηκε με επιτυχία!</string>
     <string name="profile.changePasswordSuccess.text">O νέος σας κωδικός καταχωρήθηκε με επιτυχία!</string>
 
+    <!-- DAILY PREDICTION LIST -->
+    <string name="dailyPredictionList.openButton.text">Άνοιγμα</string>
+    <string name="dailyPredictionList.imageUrl.template">"https://www.astrolucis.gr/assets/webp/%1d.webp"</string>
+    <string name="dailyPredictionList.cardTitle.template">Προβλέψεις για %1s, %2d %3s %4d</string>
     <!-- MENU -->
     <string name="drawer.menu.profile">Το Προφίλ μου</string>
     <string name="drawer.menu.natalDate">Ο Γεννέθλιος Χάρτης μου</string>
