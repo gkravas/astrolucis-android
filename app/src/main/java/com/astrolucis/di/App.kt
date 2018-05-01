@@ -1,6 +1,7 @@
 package com.astrolucis.di
 
 import android.app.Application
+import com.astrolucis.BuildConfig
 import com.astrolucis.features.dailyPredictionList.DailyPredictionListViewModel
 import com.astrolucis.services.*
 import com.astrolucis.features.home.HomeViewModel
@@ -9,6 +10,8 @@ import com.astrolucis.features.natalDate.NatalDateViewModel
 import com.astrolucis.features.profile.ProfileViewModel
 import com.astrolucis.features.resetPassword.ResetPasswordViewModel
 import com.astrolucis.utils.routing.AppRouter
+import com.google.android.gms.ads.MobileAds
+import com.google.firebase.FirebaseApp
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.startKoin
 import org.koin.dsl.module.Module
@@ -50,6 +53,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
+        MobileAds.initialize(this, BuildConfig.ADD_MOB_ID)
         startKoin(this, listOf(appModule))
     }
 }

@@ -81,6 +81,7 @@
     <string name="drawer.menu.dailyPredictions">Ημερήσιες Προβλέψεις</string>
     <string name="drawer.menu.blog">Αστρολογία</string>
     <string name="drawer.menu.logout">Έξοδος</string>
+    <string name="default_notification_channel_id">default_notification_channel</string>
 
     <string name="success.defaultTitle">Επιτυχία</string>
     <!-- ERRORS -->
