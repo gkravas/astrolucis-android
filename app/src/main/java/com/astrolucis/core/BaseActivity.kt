@@ -2,8 +2,11 @@ package com.astrolucis.core
 
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
+import android.view.View
 import com.astrolucis.R
 import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.dialogs.AlertDialog
@@ -32,8 +35,10 @@ open class BaseActivity : AppCompatActivity() {
 
     fun startWithFragment(fragment: BaseFragment) {
         if (!isBackStackEmpty()) {
-            pushFragment(fragment)
-            return
+            val backStackEntry = supportFragmentManager.backStackEntryCount
+            for (i in 0 until backStackEntry) {
+                supportFragmentManager.popBackStackImmediate()
+            }
         }
         val tag = System.currentTimeMillis().toString()
         supportFragmentManager
@@ -88,5 +93,21 @@ open class BaseActivity : AppCompatActivity() {
                     resources.getString(android.R.string.cancel))
                     .show(supportFragmentManager, id)
         })
+    }
+
+    fun showSnackBar(view: View, @StringRes title: Int) {
+        runOnUiThread({
+            Snackbar.make(view, title, Snackbar.LENGTH_LONG).show()
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
