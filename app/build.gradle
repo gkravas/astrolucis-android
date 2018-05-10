@@ -145,11 +145,13 @@ dependencies {
     implementation "com.facebook.android:facebook-login:$fbVersion"
     implementation "com.facebook.android:facebook-share:$fbVersion"
 
-    String firebaseVersion = '15.0.0'
+    String firebaseVersion = '15.0.2'
     implementation "com.google.firebase:firebase-core:$firebaseVersion"
     implementation "com.google.firebase:firebase-crash:$firebaseVersion"
-    implementation "com.google.firebase:firebase-ads:$firebaseVersion"
+    implementation "com.google.firebase:firebase-ads:15.0.0"
     implementation "com.google.firebase:firebase-messaging:$firebaseVersion"
+
+    implementation 'me.zhanghai.android.materialratingbar:library:1.2.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:2.+"

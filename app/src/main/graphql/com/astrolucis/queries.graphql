@@ -4,6 +4,16 @@ query GetNatalDatesQuery {
   }
 }
 
+query GetDailyPrediction($natalDateId: Int!, $date: String!) {
+    dailyPrediction(natalDateId: $natalDateId, date: $date) {
+      accuracy
+      planetExplanations {
+        title
+        lemma
+      }
+    }
+}
+
 mutation CreateNatalDate($date: String!, $name: String!, $location: String!, $primary: Boolean, $type: String) {
   createNatalDate(input: {date: $date, name: $name, location: $location, primary: $primary, type: $type}) {
     ...NatalDateFragment
@@ -19,6 +29,12 @@ mutation UpdateNatalDate($id: Int, $date: String!, $name: String!, $location: St
 mutation UpdateUser($location: String!) {
     updateUser(input: {location: $location}) {
       ...UserFragment
+    }
+}
+
+mutation RateDailyPredectionAccuracy($natalDateId: Int!, $date: String!, $accuracy: Int!) {
+    rateDailyPredectionAccuracy(input: {natalDateId: $natalDateId, date: $date, accuracy: $accuracy}) {
+      accuracy
     }
 }
 

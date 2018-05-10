@@ -76,6 +76,12 @@
     <string name="dailyPredictionList.openButton.text">Άνοιγμα</string>
     <string name="dailyPredictionList.imageUrl.template">"https://www.astrolucis.gr/assets/webp/%1d.webp"</string>
     <string name="dailyPredictionList.cardTitle.template">Προβλέψεις για %1s, %2d %3s %4d</string>
+    <!-- DAILY PREDICTION -->
+    <string name="dailyPrediction.title.text">Προβλέψεις για</string>
+    <string name="dailyPrediction.subtitle.template">%1s, %2d %3s %4d</string>
+    <string name="dailyPrediction.ratingDialog.title">Ήταν ακριβής η πρόβλεψη;</string>
+    <string name="dailyPrediction.ratingMenuButton.text">Αξιολόγηση πρόβλεψης</string>
+    <string name="dailyPrediction.ratingComplete">Σε ευχαριστούμε για την βαθμολογία σου!</string>
     <!-- MENU -->
     <string name="drawer.menu.profile">Το Προφίλ μου</string>
     <string name="drawer.menu.natalDate">Ο Γεννέθλιος Χάρτης μου</string>

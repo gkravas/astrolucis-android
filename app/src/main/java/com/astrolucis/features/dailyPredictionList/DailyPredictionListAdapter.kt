@@ -1,5 +1,6 @@
 package com.astrolucis.features.dailyPredictionList
 
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import com.astrolucis.R
 import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.CardPredictionBinding
+import com.astrolucis.features.home.HomeActivity
 import com.squareup.picasso.Picasso
 import org.koin.android.architecture.ext.KoinFactory
 import java.text.SimpleDateFormat
@@ -18,7 +20,9 @@ class DailyPredictionListAdapter: RecyclerView.Adapter<DailyPredictionListAdapte
          const val WEEK_DAYS: Int = 7
     }
 
-    var items: ArrayList<Date> = arrayListOf()
+    var viewModel: DailyPredictionListViewModel? = null
+
+    var items: List<Date> = arrayListOf()
             set(value) {
                 field = value
                 notifyDataSetChanged()
@@ -37,13 +41,12 @@ class DailyPredictionListAdapter: RecyclerView.Adapter<DailyPredictionListAdapte
         val item = items[position]
 
         val context = holder.itemView.context
-        val viewModel = ViewModelProviders.of(context as BaseActivity, KoinFactory)[DailyPredictionListViewModel::class.java]
 
         holder.binding?.titleTextView?.let {
             val locale = Locale("el")
             val calendar = Calendar.getInstance(locale)
             calendar.time = item
-            holder.binding.titleTextView.text = context.resources
+            it.text = context.resources
                     .getString(R.string.dailyPredictionList_cardTitle_template,
                             SimpleDateFormat("EEEE", locale).format(item),
                             calendar.get(Calendar.DAY_OF_MONTH),
@@ -58,11 +61,13 @@ class DailyPredictionListAdapter: RecyclerView.Adapter<DailyPredictionListAdapte
                     .into(it)
 
             it.setOnClickListener {
-                viewModel.predictionSelected(items[position])
+                viewModel?.predictionSelected(items[position])
             }
         }
         holder.binding?.openButton?.let {
-            viewModel.predictionSelected(items[position])
+            it.setOnClickListener {
+                viewModel?.predictionSelected(items[position])
+            }
         }
     }
 

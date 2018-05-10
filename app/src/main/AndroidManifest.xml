@@ -82,6 +82,10 @@
             android:name=".features.resetPassword.ResetPasswordActivity"
             android:theme="@style/AppTheme.Splash"/>
 
+        <activity
+            android:name=".features.dailyPrediction.DailyPredictionActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>
