@@ -3,6 +3,7 @@ apply plugin: 'com.apollographql.android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.firebase-crash'
 
 android {
     compileSdkVersion 27
@@ -25,12 +26,14 @@ android {
         enabled = true
     }
 
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    String kAlias = properties.getProperty("key.alias")
+    String sPassword = properties.getProperty("key.storePassword")
+    String kPassword = properties.getProperty("key.password")
+    String addMobId = properties.getProperty("addMobId")
+
     signingConfigs {
-        Properties properties = new Properties()
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        String kAlias = properties.getProperty("key.alias")
-        String sPassword = properties.getProperty("key.storePassword")
-        String kPassword = properties.getProperty("key.password")
         debug {
             storeFile file("keystore/astrolucis")
             storePassword sPassword
@@ -57,6 +60,7 @@ android {
             versionNameSuffix 'LOCAL'
             signingConfig signingConfigs.debug
             buildConfigField "String", "BASE_URL", "\"https://astrolucis.gr:3579\""
+            buildConfigField "String", "ADD_MOB_ID", addMobId
         }
         dev {
             debuggable true
@@ -64,12 +68,14 @@ android {
             versionNameSuffix 'DEV'
             signingConfig signingConfigs.dev
             buildConfigField "String", "BASE_URL", "\"https://astrolucis.gr:3579\""
+            buildConfigField "String", "ADD_MOB_ID", addMobId
         }
         release {
             minifyEnabled false
             signingConfig signingConfigs.release
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", "\"https://astrolucis.gr:3579\""
+            buildConfigField "String", "ADD_MOB_ID", addMobId
         }
     }
     testOptions {
@@ -139,12 +145,23 @@ dependencies {
     implementation "com.facebook.android:facebook-login:$fbVersion"
     implementation "com.facebook.android:facebook-share:$fbVersion"
 
+    String firebaseVersion = '15.0.2'
+    implementation "com.google.firebase:firebase-core:$firebaseVersion"
+    implementation "com.google.firebase:firebase-crash:$firebaseVersion"
+    implementation "com.google.firebase:firebase-ads:15.0.0"
+    implementation "com.google.firebase:firebase-messaging:$firebaseVersion"
+
+    implementation 'me.zhanghai.android.materialratingbar:library:1.2.0'
+
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:2.+"
     testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
     testImplementation "org.robolectric:robolectric:3.8"
     // Koin testing tools
     testImplementation "org.koin:koin-test:$koin_version"
-    androidTestImplementation 'com.android.support.test:runner:1.0.2-beta1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+// ADD THIS AT THE BOTTOM
+apply plugin: 'com.google.gms.google-services'

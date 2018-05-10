@@ -1,68 +1,56 @@
-package com.astrolucis.utils.dialogs
+package com.astrolucis.features.dailyPrediction
 
 import android.app.Dialog
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment
-import com.astrolucis.core.BaseViewModel
+import android.view.LayoutInflater
+import com.astrolucis.R
+import com.astrolucis.databinding.DialogRatingBinding
 import org.koin.android.architecture.ext.KoinFactory
-import java.io.Serializable
-import java.lang.RuntimeException
-import kotlin.reflect.KClass
 
-class AlertDialog: AppCompatDialogFragment() {
-
-    data class Data<T: BaseViewModel>(val viewModelClass: KClass<T>) : Serializable
+class RatingAccuracyDialog: AppCompatDialogFragment() {
 
     companion object {
-        public const val LOGOUT_DIALOG_ID = "logoutDialogId"
+        public const val RATING_DIALOG_ID = "ratingDialogId"
         private const val TAG = "AlertDialog"
-        private const val ID = "$TAG.id"
+        private const val RATING = "$TAG.rating"
         private const val TITLE = "$TAG.title"
-        private const val MESSAGE = "$TAG.message"
         private const val OK = "$TAG.ok"
         private const val CANCEL = "$TAG.cancel"
-        private const val DATA = "$TAG.data"
 
-        fun newInstance(id: String = "", data: Data<*>?, title: CharSequence = "", message: CharSequence = "",
-                        ok: CharSequence = "",
-                        cancel: CharSequence = ""): AlertDialog {
+        fun newInstance(rating: Int, title: CharSequence = "", ok: CharSequence = "",
+                        cancel: CharSequence = ""): RatingAccuracyDialog {
 
-            return AlertDialog().also {
+            return RatingAccuracyDialog().also {
                 it.arguments = Bundle().apply {
-                    this.putCharSequence(ID, id)
+                    this.putInt(RATING, rating)
                     this.putCharSequence(TITLE, title)
-                    this.putCharSequence(MESSAGE, message)
                     this.putCharSequence(OK, ok)
                     this.putCharSequence(CANCEL, cancel)
-                    this.putSerializable(DATA, data)
                 }
             }
         }
     }
 
-    lateinit var viewModel: BaseViewModel
+    lateinit var viewModel: DailyPredictionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val data = arguments!![DATA]
-        if (data is Data<*>) {
-            viewModel = try {
-                ViewModelProviders.of(requireActivity(), KoinFactory)[data.viewModelClass.java]
-            } catch (e: RuntimeException) {
-                ViewModelProviders.of(this, KoinFactory)[data.viewModelClass.java]
-            }
-
-        }
+        viewModel = ViewModelProviders.of(requireActivity(), KoinFactory)[DailyPredictionViewModel::class.java]
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val binding: DialogRatingBinding = DataBindingUtil
+                .inflate(LayoutInflater.from(context), R.layout.dialog_rating, null, false)
+
         val builder = android.support.v7.app.AlertDialog.Builder(activity!!)
         arguments?.let {
-            val id = it[ID] as String
 
-            builder.setMessage(it[MESSAGE] as String)
+            builder.setView(binding.root)
+
+            binding.ratingBar.progress = it[RATING] as Int
 
             val titleLemma = it[TITLE] as String
             if (titleLemma.isNotEmpty()) {
@@ -72,16 +60,14 @@ class AlertDialog: AppCompatDialogFragment() {
             val okLemma = it[OK] as String
             if (okLemma.isNotEmpty()) {
                 builder.setPositiveButton(okLemma) { _, _ ->
-                    this.targetFragment?.activity?.runOnUiThread({
-                        viewModel.onDialogAction(id, true)
-                    })
+                    viewModel.onAccuracySubmission(binding.ratingBar.progress.toLong())
                 }
             }
             val cancelLemma = it[CANCEL] as String
             if (cancelLemma.isNotEmpty()) {
                 builder.setNegativeButton(cancelLemma) { _, _ ->
                     this.targetFragment?.activity?.runOnUiThread({
-                        viewModel.onDialogAction(id, false)
+                        dismiss()
                     })
                 }
             }

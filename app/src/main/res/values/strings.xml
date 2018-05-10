@@ -7,6 +7,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="back_again_to_exit">Πάτησε ξανά για έξοδο</string>
 
     <!-- LOGIN -->
     <string name="login.email.hint">Email</string>
@@ -75,12 +76,19 @@
     <string name="dailyPredictionList.openButton.text">Άνοιγμα</string>
     <string name="dailyPredictionList.imageUrl.template">"https://www.astrolucis.gr/assets/webp/%1d.webp"</string>
     <string name="dailyPredictionList.cardTitle.template">Προβλέψεις για %1s, %2d %3s %4d</string>
+    <!-- DAILY PREDICTION -->
+    <string name="dailyPrediction.title.text">Προβλέψεις για</string>
+    <string name="dailyPrediction.subtitle.template">%1s, %2d %3s %4d</string>
+    <string name="dailyPrediction.ratingDialog.title">Ήταν ακριβής η πρόβλεψη;</string>
+    <string name="dailyPrediction.ratingMenuButton.text">Αξιολόγηση πρόβλεψης</string>
+    <string name="dailyPrediction.ratingComplete">Σε ευχαριστούμε για την βαθμολογία σου!</string>
     <!-- MENU -->
     <string name="drawer.menu.profile">Το Προφίλ μου</string>
     <string name="drawer.menu.natalDate">Ο Γεννέθλιος Χάρτης μου</string>
     <string name="drawer.menu.dailyPredictions">Ημερήσιες Προβλέψεις</string>
     <string name="drawer.menu.blog">Αστρολογία</string>
     <string name="drawer.menu.logout">Έξοδος</string>
+    <string name="default_notification_channel_id">default_notification_channel</string>
 
     <string name="success.defaultTitle">Επιτυχία</string>
     <!-- ERRORS -->

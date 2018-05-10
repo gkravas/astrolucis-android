@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.databinding.OnRebindCallback
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.transition.TransitionManager
@@ -20,6 +21,9 @@ import com.astrolucis.features.profile.ProfileFragment
 import com.astrolucis.utils.routing.AppRouter
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
+import android.widget.Toast
+
+
 
 
 class HomeActivity: BaseActivity() {
@@ -30,8 +34,8 @@ class HomeActivity: BaseActivity() {
     }
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
-
-    lateinit var binding: ActivityHomeBinding
+    private lateinit var binding: ActivityHomeBinding
+    private var doubleBackToExitPressedOnce: Boolean = false
 
     val viewModel : HomeViewModel by viewModel()
     val appRouter: AppRouter by inject()
@@ -102,19 +106,22 @@ class HomeActivity: BaseActivity() {
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
-
-        when (item.itemId) {
-            android.R.id.home -> {
-                binding.drawerLayout.openDrawer(GravityCompat.START)
-                return true
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            if (isAtRootFragment()) {
+                if (doubleBackToExitPressedOnce) {
+                    moveTaskToBack(true)
+                    return
+                }
+                this.doubleBackToExitPressedOnce = true
+                Toast.makeText(this, R.string.back_again_to_exit, Toast.LENGTH_SHORT).show()
+                Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            } else {
+                super.onBackPressed()
             }
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

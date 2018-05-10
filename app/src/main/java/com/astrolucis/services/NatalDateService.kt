@@ -1,9 +1,7 @@
 package com.astrolucis.services
 
 import com.apollographql.apollo.rx2.Rx2Apollo
-import com.astrolucis.CreateNatalDateMutation
-import com.astrolucis.GetNatalDatesQuery
-import com.astrolucis.UpdateNatalDateMutation
+import com.astrolucis.*
 import com.astrolucis.exceptions.GraphQLException
 import com.astrolucis.fragment.NatalDateFragment
 import com.astrolucis.fragment.UserFragment
@@ -66,6 +64,33 @@ class NatalDateService(private val graphQLService: GraphQLService,
             } else {
                 Observable.just(it.data()?.updateNatalDate()?.fragments()?.natalDateFragment())
             }
+        }
+    }
+
+    override fun getDailyPrediction(natalDateId: Long, date: String): Observable<GetDailyPredictionQuery.DailyPrediction> {
+        return Rx2Apollo.from(graphQLService.apolloClient
+                .query(GetDailyPredictionQuery
+                        .builder()
+                        .natalDateId(natalDateId)
+                        .date(date)
+                        .build()
+                )
+        ).flatMap {
+            Observable.just(it.data()?.dailyPrediction())
+        }
+    }
+
+    override fun rateDailyPredectionAccuracy(natalDateId: Long, date: String, accuracy: Long): Observable<RateDailyPredectionAccuracyMutation.RateDailyPredectionAccuracy> {
+        return Rx2Apollo.from(graphQLService.apolloClient
+                .mutate(RateDailyPredectionAccuracyMutation
+                        .builder()
+                        .natalDateId(natalDateId)
+                        .date(date)
+                        .accuracy(accuracy)
+                        .build()
+                )
+        ).flatMap {
+            Observable.just(it.data()?.rateDailyPredectionAccuracy())
         }
     }
 }

@@ -7,7 +7,7 @@ import com.astrolucis.features.natalDate.NatalDateViewModel
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DailyPredictionListViewModel(application: Application) : BaseViewModel(application) {
+class DailyPredictionListViewModel : BaseViewModel {
 
     companion object {
         public const val VISIBLE_DATES: Int = 60
@@ -20,6 +20,10 @@ class DailyPredictionListViewModel(application: Application) : BaseViewModel(app
 
     val listLiveData: MutableLiveData<ArrayList<Date>> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Pair<Action, Any>> = MutableLiveData()
+
+    constructor(application: Application): super(application) {
+
+    }
 
     fun initForm() {
         if (predictionDates.isEmpty()) {
