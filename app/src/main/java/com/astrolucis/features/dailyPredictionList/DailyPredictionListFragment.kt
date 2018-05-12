@@ -15,12 +15,20 @@ import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentDailyPredictionsBinding
 import com.astrolucis.features.dailyPrediction.DailyPredictionActivity
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import org.koin.android.architecture.ext.viewModel
 import java.util.*
 
 class DailyPredictionListFragment : BaseFragment() {
 
-    lateinit var binding: FragmentDailyPredictionsBinding
+    companion object {
+        const val ADD_UNIT: String = "ca-app-pub-6040563814771861/3089916243"
+    }
+    private lateinit var mInterstitialAd: InterstitialAd
+    private lateinit var binding: FragmentDailyPredictionsBinding
     val viewModel: DailyPredictionListViewModel by viewModel()
 
     override fun onAttach(context: Context?) {
@@ -35,15 +43,33 @@ class DailyPredictionListFragment : BaseFragment() {
         viewModel.actionsLiveData.observe(this, android.arch.lifecycle.Observer {
             when(it?.first) {
                 DailyPredictionListViewModel.Action.GO_TO_DAILY_PREDICTION -> {
-                    Intent(context, DailyPredictionActivity::class.java).apply {
-                        this.putExtra(DailyPredictionActivity.NATAL_DATE_ID, 1.toLong())
-                        this.putExtra(DailyPredictionActivity.DATE, it.second as Date)
-                        startActivity(this)
+                    if (mInterstitialAd.isLoaded) {
+                        mInterstitialAd.show()
                     }
                 }
             }
         })
         viewModel.initForm()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        MobileAds.initialize(context)
+        mInterstitialAd = InterstitialAd(context)
+        mInterstitialAd.adUnitId = ADD_UNIT
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
+        mInterstitialAd.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                val lastAction = viewModel.actionsLiveData.value
+                Intent(context, DailyPredictionActivity::class.java).apply {
+                    @Suppress("UNCHECKED_CAST")
+                    val value: Pair<Long, Date> = lastAction?.second as Pair<Long, Date>
+                    this.putExtra(DailyPredictionActivity.NATAL_DATE_ID, value.first)
+                    this.putExtra(DailyPredictionActivity.DATE, value.second)
+                    startActivity(this)
+                }
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
