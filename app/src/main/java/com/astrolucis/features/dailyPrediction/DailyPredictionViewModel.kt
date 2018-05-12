@@ -23,7 +23,7 @@ class DailyPredictionViewModel : BaseViewModel {
 
 
     companion object {
-        const val ACCURACY_MULTIPLIER: Long = 20
+        const val ACCURACY_MULTIPLIER: Long = 10
     }
 
     private val natalDateService: NatalDateService

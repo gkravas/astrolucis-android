@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.astrolucis.core.BaseViewModel
 import com.astrolucis.features.natalDate.NatalDateViewModel
+import com.astrolucis.services.interfaces.Preferences
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -17,12 +18,13 @@ class DailyPredictionListViewModel : BaseViewModel {
     }
 
     private var predictionDates: ArrayList<Date> = arrayListOf()
+    private val preferences: Preferences
 
     val listLiveData: MutableLiveData<ArrayList<Date>> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Pair<Action, Any>> = MutableLiveData()
 
-    constructor(application: Application): super(application) {
-
+    constructor(application: Application, preferences: Preferences): super(application) {
+        this.preferences = preferences
     }
 
     fun initForm() {
@@ -45,6 +47,8 @@ class DailyPredictionListViewModel : BaseViewModel {
     }
 
     fun predictionSelected(date: Date) {
-        actionsLiveData.value = Pair(Action.GO_TO_DAILY_PREDICTION, date)
+        preferences.me?.natalDates()?.first()?.fragments()?.natalDateFragment()?.id()?.let {
+            actionsLiveData.value = Pair(Action.GO_TO_DAILY_PREDICTION, Pair(it, date))
+        }
     }
 }

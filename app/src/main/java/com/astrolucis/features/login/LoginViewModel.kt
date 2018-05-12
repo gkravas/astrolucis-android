@@ -8,6 +8,8 @@ import android.databinding.ObservableField
 import com.astrolucis.R
 import com.astrolucis.core.BaseViewModel
 import com.astrolucis.di.App
+import com.astrolucis.fragment.UserFragment
+import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.repsonses.LoginResponse
@@ -52,6 +54,7 @@ class LoginViewModel: BaseViewModel {
     val toggleStateText: ObservableField<CharSequence> = ObservableField("")
 
     private val userService: UserService
+    private val natalDateService: NatalDateService
     val preferences: Preferences
 
     private val disposables = CompositeDisposable()
@@ -59,9 +62,13 @@ class LoginViewModel: BaseViewModel {
     val messagesLiveData: MutableLiveData<ErrorPresentation> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Action> = MutableLiveData()
 
-    constructor(application: Application, userService: UserService, preferences: Preferences) : super(application) {
+    constructor(application: Application,
+                userService: UserService,
+                natalDateService: NatalDateService,
+                preferences: Preferences) : super(application) {
 
         this.userService = userService
+        this.natalDateService = natalDateService
         this.preferences = preferences
 
         this.viewState.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
@@ -215,7 +222,14 @@ class LoginViewModel: BaseViewModel {
 
     private fun handleLoginSuccess(loginResponse: LoginResponse) {
         preferences.token = loginResponse.token
-        actionsLiveData.value = Action.GO_TO_HOME
+        natalDateService.getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { me -> preferences.me = me }
+                .subscribe(
+                        { actionsLiveData.value = Action.GO_TO_HOME },
+                        { handleError(it) }
+                )
     }
 
     private fun handleError(throwable: Throwable) {

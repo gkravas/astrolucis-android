@@ -36,12 +36,12 @@ class App : Application() {
             cookieManager
         }
 
-        viewModel { LoginViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get()) }
+        viewModel { LoginViewModel(get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get()) }
         viewModel { NatalDateViewModel(get(), get(), get(), get()) }
         viewModel { ResetPasswordViewModel(get(), get(), get(), get()) }
         viewModel { ProfileViewModel(get(), get(), get()) }
-        viewModel { DailyPredictionListViewModel(get()) }
+        viewModel { DailyPredictionListViewModel(get(), get()) }
         viewModel { DailyPredictionViewModel(get(), get()) }
     }
 

@@ -109,7 +109,7 @@ class DailyPredictionActivity : BaseActivity() {
                             calendar.get(Calendar.YEAR))
 
             viewModel.loadPrediction(it[NATAL_DATE_ID] as Long,
-                    SimpleDateFormat("YYYY-MM-dd", locale).format(it[DATE]))
+                    SimpleDateFormat("yyyy-MM-dd", locale).format(it[DATE]))
         }
     }
 

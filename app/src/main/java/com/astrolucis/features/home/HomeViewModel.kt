@@ -3,11 +3,13 @@ package com.astrolucis.features.home
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.astrolucis.core.BaseViewModel
+import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 
 class HomeViewModel: BaseViewModel {
 
     enum class ViewState {
+        STAY_THERE,
         PROFILE,
         NATAL_DATE,
         DAILY_PREDICTION_LIST,
@@ -15,11 +17,13 @@ class HomeViewModel: BaseViewModel {
     }
 
     private val userService: UserService
+    private val preferences: Preferences
 
     val viewState: MutableLiveData<ViewState> = MutableLiveData()
 
-    constructor(application: Application, userService: UserService) : super(application) {
+    constructor(application: Application, userService: UserService, preferences: Preferences) : super(application) {
         this.userService = userService
+        this.preferences = preferences
     }
 
     fun logout() {
@@ -28,14 +32,21 @@ class HomeViewModel: BaseViewModel {
     }
 
     fun goToProfile() {
-        viewState.value = ViewState.PROFILE
+        viewState.value = getGoTo(ViewState.PROFILE)
     }
 
     fun goToNatalDate() {
-        viewState.value = ViewState.NATAL_DATE
+        viewState.value = getGoTo(ViewState.NATAL_DATE)
     }
 
     fun goToDailyPrediction() {
-        viewState.value = ViewState.DAILY_PREDICTION_LIST
+        viewState.value = getGoTo(ViewState.DAILY_PREDICTION_LIST)
+    }
+
+    fun getGoTo(viewState: ViewState): ViewState {
+        if (preferences.me?.natalDates()?.isEmpty()!!) {
+            return ViewState.STAY_THERE
+        }
+        return viewState
     }
 }

@@ -120,7 +120,10 @@ class NatalDateViewModel : BaseViewModel {
                 .subscribe(
                         { me ->
                             showNatalDate(me?.location(),
-                                    me?.natalDates()?.first()?.fragments()?.natalDateFragment())
+                                    me?.natalDates()
+                                            ?.firstOrNull()
+                                            ?.fragments()
+                                            ?.natalDateFragment())
                             loading.set(false)
                         },
                         { throwable ->

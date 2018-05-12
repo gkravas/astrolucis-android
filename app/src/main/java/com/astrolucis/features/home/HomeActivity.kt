@@ -66,18 +66,23 @@ class HomeActivity: BaseActivity() {
         viewModel.viewState.observeForever( { viewState: HomeViewModel.ViewState? ->
             when (viewState) {
                 HomeViewModel.ViewState.PROFILE -> {
-                    startWithFragment(ProfileFragment())
+                    pushFragment(ProfileFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.profile_menu_item) })
                 }
                 HomeViewModel.ViewState.NATAL_DATE -> {
-                    startWithFragment(NatalDateFragment())
+                    pushFragment(NatalDateFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.natal_date_menu_item) })
                 }
                 HomeViewModel.ViewState.DAILY_PREDICTION_LIST -> {
-                    startWithFragment(DailyPredictionListFragment())
+                    pushFragment(DailyPredictionListFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.daily_prediction_menu_item) })
                 }
-                HomeViewModel.ViewState.LOGOUT -> appRouter.goTo(LoginActivity::class, this)
+                HomeViewModel.ViewState.LOGOUT -> {
+                    appRouter.goTo(LoginActivity::class, this)
+                }
+                HomeViewModel.ViewState.STAY_THERE -> {
+
+                }
             }
         })
 
@@ -110,17 +115,13 @@ class HomeActivity: BaseActivity() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            if (isAtRootFragment()) {
-                if (doubleBackToExitPressedOnce) {
-                    moveTaskToBack(true)
-                    return
-                }
-                this.doubleBackToExitPressedOnce = true
-                Toast.makeText(this, R.string.back_again_to_exit, Toast.LENGTH_SHORT).show()
-                Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
-            } else {
-                super.onBackPressed()
+            if (doubleBackToExitPressedOnce) {
+                moveTaskToBack(true)
+                return
             }
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, R.string.back_again_to_exit, Toast.LENGTH_SHORT).show()
+            Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         }
     }
 

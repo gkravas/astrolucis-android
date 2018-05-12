@@ -52,28 +52,15 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
         } else if (!JWTUtils.isLoggedIn(preferences.token)) {
             startActivity(fromActivity, Intent(fromActivity, LoginActivity::class.java), delay)
         } else {
-            getUserData()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { me ->
-                                params.clear()
-                                val intent: Intent = if (me == null) {
-                                    params.putBoolean(HomeActivity.OPEN_NATAL_DATE, true)
-                                    Intent(fromActivity, HomeActivity::class.java).apply {
-                                        putExtras(params)
-                                    }
-                                } else {
-                                    Intent(fromActivity, activityClass.java).apply {
-                                        putExtras(params)
-                                    }
-                                }
-                                startActivity(fromActivity, intent, delay)
-                            },
-                            {
-                                startActivity(fromActivity, Intent(fromActivity, LoginActivity::class.java), delay)
-                            }
-                    )
+            val intent: Intent = preferences.me?.natalDates()?.isEmpty()?.not()?.let {
+                Intent(fromActivity, activityClass.java).apply {
+                    putExtras(params)
+                }
+            } ?: Intent(fromActivity, HomeActivity::class.java).apply {
+                    params.putBoolean(HomeActivity.OPEN_NATAL_DATE, true)
+                    putExtras(params)
+            }
+            startActivity(fromActivity, intent, delay)
         }
     }
 
@@ -81,15 +68,6 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
         fromActivity.startActivity(intent)
         if (delay != NO_DELAY) {
             Handler().postDelayed({ fromActivity.finish() }, delay)
-        }
-    }
-
-    private fun getUserData(): Observable<UserFragment> {
-        return if (preferences.me == null) {
-            natalDateService.getAll()
-                    .doOnNext { me -> preferences.me = me }
-        } else {
-            Observable.just(preferences.me)
         }
     }
 }
