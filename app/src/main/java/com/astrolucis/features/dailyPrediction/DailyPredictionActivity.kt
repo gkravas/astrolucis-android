@@ -21,6 +21,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.astrolucis.GetDailyPredictionQuery
 import com.astrolucis.utils.ErrorPresentation
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 
 
 class DailyPredictionActivity : BaseActivity() {
@@ -111,6 +113,10 @@ class DailyPredictionActivity : BaseActivity() {
             viewModel.loadPrediction(it[NATAL_DATE_ID] as Long,
                     SimpleDateFormat("yyyy-MM-dd", locale).format(it[DATE]))
         }
+
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

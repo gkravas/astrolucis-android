@@ -225,9 +225,11 @@ class LoginViewModel: BaseViewModel {
         natalDateService.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { me -> preferences.me = me }
                 .subscribe(
-                        { actionsLiveData.value = Action.GO_TO_HOME },
+                        { me ->
+                            preferences.me = me
+                            actionsLiveData.value = Action.GO_TO_HOME
+                        },
                         { handleError(it) }
                 )
     }
