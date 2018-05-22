@@ -5,10 +5,14 @@ import com.astrolucis.utils.ErrorFactory
 import com.astrolucis.R
 import com.astrolucis.utils.TrampolineSchedulerRule
 import com.astrolucis.features.login.LoginViewModel
+import com.astrolucis.fragment.NatalDateFragment
+import com.astrolucis.fragment.UserFragment
 import com.astrolucis.models.User
+import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.services.repsonses.LoginResponse
+import com.astrolucis.type.natalDatetypeEnumType
 import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.dialogs.AlertDialog
 import com.nhaarman.mockito_kotlin.doReturn
@@ -22,6 +26,7 @@ import org.junit.runner.RunWith
 import org.koin.standalone.StandAloneContext
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class LoginViewModelTest: BaseTest() {
@@ -55,9 +60,13 @@ class LoginViewModelTest: BaseTest() {
     }
 
     private fun initViewModel(userService: UserService, preferences: Preferences): LoginViewModel {
-        return LoginViewModel(RuntimeEnvironment.application, userService, preferences)
+        return LoginViewModel(RuntimeEnvironment.application, userService, initNatalDateService(), preferences)
     }
 
+    private fun initNatalDateService(): NatalDateService {
+        return mock {
+        }
+    }
     private fun initUserService(): UserService {
         return mock {
             on { login(VALID_EMAIL, VALID_PASSWORD) } doReturn Observable.just(LoginResponse(User(1, VALID_EMAIL, arrayOf()), ""))

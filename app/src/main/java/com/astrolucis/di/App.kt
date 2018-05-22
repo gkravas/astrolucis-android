@@ -25,7 +25,7 @@ class App : Application() {
     private val appModule : Module = org.koin.dsl.module.applicationContext {
         bean { Preferences(instance) as com.astrolucis.services.interfaces.Preferences }
         bean { GraphQLService(get()) }
-        bean { AppRouter(get(), get()) }
+        bean { AppRouter(get()) }
         bean { NatalDateService(get(), get()) as com.astrolucis.services.interfaces.NatalDateService}
         bean { UserService(get(), get(), get()) as com.astrolucis.services.interfaces.UserService}
         bean { RestService(get(), get()) }

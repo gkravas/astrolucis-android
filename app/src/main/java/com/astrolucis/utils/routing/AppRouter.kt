@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.isSuperclassOf
 
-class AppRouter(private val preferences: Preferences, private val natalDateService: NatalDateService) {
+class AppRouter(private val preferences: Preferences) {
 
     companion object {
         const val DELAY: Long = 1000
@@ -52,14 +52,20 @@ class AppRouter(private val preferences: Preferences, private val natalDateServi
         } else if (!JWTUtils.isLoggedIn(preferences.token)) {
             startActivity(fromActivity, Intent(fromActivity, LoginActivity::class.java), delay)
         } else {
-            val intent: Intent = preferences.me?.natalDates()?.isEmpty()?.not()?.let {
-                Intent(fromActivity, activityClass.java).apply {
-                    putExtras(params)
+            val natalDateIntent = Intent(fromActivity, HomeActivity::class.java).apply {
+                val bundle = Bundle().apply {
+                    putBoolean(HomeActivity.OPEN_NATAL_DATE, true)
                 }
-            } ?: Intent(fromActivity, HomeActivity::class.java).apply {
-                    params.putBoolean(HomeActivity.OPEN_NATAL_DATE, true)
-                    putExtras(params)
+                putExtras(bundle)
             }
+            val intent: Intent = preferences.me?.natalDates()?.let {
+                it.isEmpty().let {
+                    if (!it) Intent(fromActivity, activityClass.java).apply {
+                        putExtras(params)
+                    } else natalDateIntent
+                }
+            } ?: natalDateIntent
+
             startActivity(fromActivity, intent, delay)
         }
     }

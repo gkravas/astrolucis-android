@@ -28,7 +28,7 @@ class DailyPredictionListViewModelTest: BaseTest() {
     }
 
     private fun initViewModel(): DailyPredictionListViewModel {
-        return DailyPredictionListViewModel(RuntimeEnvironment.application)
+        return DailyPredictionListViewModel(RuntimeEnvironment.application, initPreferences())
     }
 
     @Test

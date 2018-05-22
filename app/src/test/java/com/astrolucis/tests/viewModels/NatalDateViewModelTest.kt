@@ -9,6 +9,7 @@ import com.astrolucis.models.NatalType
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
+import com.astrolucis.tests.utils.Constants
 import com.astrolucis.type.natalDatetypeEnumType
 import com.astrolucis.utils.ErrorFactory
 import com.astrolucis.utils.ErrorPresentation
@@ -32,22 +33,15 @@ import java.util.*
 class NatalDateViewModelTest: BaseTest() {
 
     companion object {
-        private const val EMPTY = ""
-        private const val NATAL_DATE_ID: Long = 1
-        private const val TEST_EMAIL: String = "test@astrolucis.gr"
-        private const val VALID_LIVING_LOCATION = "Greece"
         private const val INVALID_LIVING_LOCATION = "invalid living location"
-        private const val VALID_BIRTH_LOCATION = "Greece"
         private const val INVALID_BIRTH_LOCATION = "invalid birth location"
         private const val VALID_BIRTH_DATE = "16/08/1984"
         private const val VALID_BIRTH_TIME = "21:30"
         private const val INVALID_BIRTH_DATE = "17/08/1984"
         private const val INVALID_BIRTH_TIME = "22:30"
-        private const val VALID_NAME = "me"
         private const val VALID_TYPE = "freeSpirit"
         private const val CLIENT_SIDE_FULL_DATE = "1984-08-16T21:30:00"
         private const val INVALID_CLIENT_SIDE_FULL_DATE = "1984-08-17T22:30:00"
-        private const val SERVER_SIDE_FULL_DATE = "Thu Aug 16 1984 21:30:00 GMT+0200 (CEST)"
     }
 
     @get:Rule
@@ -60,38 +54,30 @@ class NatalDateViewModelTest: BaseTest() {
 
     private fun initUserService(): UserService {
         return mock {
-            on { updateLivingLocation(VALID_LIVING_LOCATION) } doReturn Observable.just(createValidUser())
+            on { updateLivingLocation(Constants.VALID_LIVING_LOCATION) } doReturn Observable.just(createValidUser())
             on { updateLivingLocation(INVALID_LIVING_LOCATION) } doReturn Observable.error(ErrorFactory.createLivingLocationError())
         }
     }
 
-    private fun createValidUser(): UserFragment {
-        val natalDateFragment = NatalDateFragment(EMPTY, NATAL_DATE_ID, VALID_NAME, SERVER_SIDE_FULL_DATE,
-                VALID_BIRTH_LOCATION, true, natalDatetypeEnumType.freeSpirit)
-        val natalDate = UserFragment.NatalDate(EMPTY, UserFragment.NatalDate.Fragments(natalDateFragment))
-
-        return UserFragment(EMPTY, TEST_EMAIL, VALID_LIVING_LOCATION, Arrays.asList(natalDate))
-    }
-
     private fun initNatalDateService(returnNatalDate: Boolean): NatalDateService {
-        val natalDateFragment = NatalDateFragment(EMPTY, 1, VALID_NAME, SERVER_SIDE_FULL_DATE,
-                VALID_LIVING_LOCATION, true, natalDatetypeEnumType.freeSpirit)
+        val natalDateFragment = NatalDateFragment(Constants.EMPTY, 1, Constants.VALID_NAME, Constants.SERVER_SIDE_FULL_DATE,
+                Constants.VALID_LIVING_LOCATION, true, natalDatetypeEnumType.freeSpirit)
         val observable = if (returnNatalDate) {
             val natalDate = UserFragment.NatalDate("", UserFragment.NatalDate.Fragments(natalDateFragment))
-            Observable.just(UserFragment(EMPTY, TEST_EMAIL, VALID_LIVING_LOCATION, Arrays.asList(natalDate)))
+            Observable.just(UserFragment(Constants.EMPTY, Constants.TEST_EMAIL, Constants.VALID_LIVING_LOCATION, Arrays.asList(natalDate)))
         } else {
-            Observable.just(UserFragment(EMPTY, TEST_EMAIL, EMPTY, null))
+            Observable.just(UserFragment(Constants.EMPTY, Constants.TEST_EMAIL, Constants.EMPTY, null))
         }
         return mock {
             on { getAll() } doReturn observable
-            on { createNatalDateMutation(CLIENT_SIDE_FULL_DATE, VALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.just(natalDateFragment)
-            on { updateNatalDateMutation(1, CLIENT_SIDE_FULL_DATE, VALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.just(natalDateFragment)
-            on { createNatalDateMutation(CLIENT_SIDE_FULL_DATE, INVALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthLocationError())
-            on { updateNatalDateMutation(1, CLIENT_SIDE_FULL_DATE, INVALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthLocationError())
-            on { createNatalDateMutation(INVALID_CLIENT_SIDE_FULL_DATE, VALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthDateError())
-            on { updateNatalDateMutation(1, INVALID_CLIENT_SIDE_FULL_DATE, VALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthDateError())
+            on { createNatalDateMutation(CLIENT_SIDE_FULL_DATE, Constants.VALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.just(natalDateFragment)
+            on { updateNatalDateMutation(1, CLIENT_SIDE_FULL_DATE, Constants.VALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.just(natalDateFragment)
+            on { createNatalDateMutation(CLIENT_SIDE_FULL_DATE, INVALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthLocationError())
+            on { updateNatalDateMutation(1, CLIENT_SIDE_FULL_DATE, INVALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthLocationError())
+            on { createNatalDateMutation(INVALID_CLIENT_SIDE_FULL_DATE, Constants.VALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthDateError())
+            on { updateNatalDateMutation(1, INVALID_CLIENT_SIDE_FULL_DATE, Constants.VALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createBirthDateError())
 
-            on { createNatalDateMutation(INVALID_CLIENT_SIDE_FULL_DATE, INVALID_BIRTH_LOCATION, VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createServerError())
+            on { createNatalDateMutation(INVALID_CLIENT_SIDE_FULL_DATE, INVALID_BIRTH_LOCATION, Constants.VALID_NAME, true, VALID_TYPE) } doReturn Observable.error(ErrorFactory.createServerError())
         }
     }
 
@@ -110,7 +96,7 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(EMPTY)
+        natalDateViewModel.livingLocationField.set(Constants.EMPTY)
         natalDateViewModel.livingLocationField.notifyChange()
         Assert.assertEquals(resources.getText(R.string.natalDate_livingLocation_emptyError),
                 natalDateViewModel.livingLocationError.get())
@@ -122,7 +108,7 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.birthLocationField.set(EMPTY)
+        natalDateViewModel.birthLocationField.set(Constants.EMPTY)
         natalDateViewModel.birthLocationField.notifyChange()
         Assert.assertEquals(resources.getText(R.string.natalDate_birthLocation_emptyError),
                 natalDateViewModel.birthLocationError.get())
@@ -134,7 +120,7 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.birthDateField.set(EMPTY)
+        natalDateViewModel.birthDateField.set(Constants.EMPTY)
         natalDateViewModel.birthDateField.notifyChange()
         Assert.assertEquals(resources.getText(R.string.natalDate_birthDate_emptyError),
                 natalDateViewModel.birthDateError.get())
@@ -146,7 +132,7 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.birthTimeField.set(EMPTY)
+        natalDateViewModel.birthTimeField.set(Constants.EMPTY)
         natalDateViewModel.birthTimeField.notifyChange()
         Assert.assertEquals(resources.getText(R.string.natalDate_birthTime_emptyError),
                 natalDateViewModel.birthTimeError.get())
@@ -159,10 +145,10 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(EMPTY)
+        natalDateViewModel.livingLocationField.set(Constants.EMPTY)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(VALID_BIRTH_LOCATION)
+        natalDateViewModel.birthLocationField.set(Constants.VALID_BIRTH_LOCATION)
         natalDateViewModel.birthLocationField.notifyChange()
 
         natalDateViewModel.birthDateField.set(VALID_BIRTH_DATE)
@@ -182,10 +168,10 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(EMPTY)
+        natalDateViewModel.birthLocationField.set(Constants.EMPTY)
         natalDateViewModel.birthLocationField.notifyChange()
 
         natalDateViewModel.birthDateField.set(VALID_BIRTH_DATE)
@@ -205,13 +191,13 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(VALID_BIRTH_LOCATION)
+        natalDateViewModel.birthLocationField.set(Constants.VALID_BIRTH_LOCATION)
         natalDateViewModel.birthLocationField.notifyChange()
 
-        natalDateViewModel.birthDateField.set(EMPTY)
+        natalDateViewModel.birthDateField.set(Constants.EMPTY)
         natalDateViewModel.birthDateField.notifyChange()
 
         natalDateViewModel.birthTimeField.set(VALID_BIRTH_TIME)
@@ -228,16 +214,16 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(VALID_BIRTH_LOCATION)
+        natalDateViewModel.birthLocationField.set(Constants.VALID_BIRTH_LOCATION)
         natalDateViewModel.birthLocationField.notifyChange()
 
         natalDateViewModel.birthDateField.set(VALID_BIRTH_DATE)
         natalDateViewModel.birthDateField.notifyChange()
 
-        natalDateViewModel.birthTimeField.set(EMPTY)
+        natalDateViewModel.birthTimeField.set(Constants.EMPTY)
         natalDateViewModel.birthTimeField.notifyChange()
 
         natalDateViewModel.save()
@@ -251,10 +237,10 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(false),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(VALID_BIRTH_LOCATION)
+        natalDateViewModel.birthLocationField.set(Constants.VALID_BIRTH_LOCATION)
         natalDateViewModel.birthLocationField.notifyChange()
 
         natalDateViewModel.birthDateField.set(VALID_BIRTH_DATE)
@@ -279,8 +265,8 @@ class NatalDateViewModelTest: BaseTest() {
 
         //test if it is not loading at the end of the goal
         Assert.assertEquals(false, natalDateViewModel.loading.get())
-        Assert.assertEquals(VALID_LIVING_LOCATION, natalDateViewModel.livingLocationField.get())
-        Assert.assertEquals(VALID_BIRTH_LOCATION, natalDateViewModel.birthLocationField.get())
+        Assert.assertEquals(Constants.VALID_LIVING_LOCATION, natalDateViewModel.livingLocationField.get())
+        Assert.assertEquals(Constants.VALID_BIRTH_LOCATION, natalDateViewModel.birthLocationField.get())
         Assert.assertEquals(VALID_BIRTH_DATE, natalDateViewModel.birthDateField.get())
         Assert.assertEquals(VALID_BIRTH_TIME, natalDateViewModel.birthTimeField.get())
 
@@ -301,8 +287,8 @@ class NatalDateViewModelTest: BaseTest() {
 
         Assert.assertEquals(resources.getString(R.string.natalDate_defaultCountry),
                 natalDateViewModel.livingLocationField.get())
-        Assert.assertEquals(EMPTY, natalDateViewModel.birthLocationField.get())
-        Assert.assertEquals(EMPTY, natalDateViewModel.birthDateField.get())
+        Assert.assertEquals(Constants.EMPTY, natalDateViewModel.birthLocationField.get())
+        Assert.assertEquals(Constants.EMPTY, natalDateViewModel.birthDateField.get())
         Assert.assertEquals(resources.getString(R.string.natalDate_defaultTime),
                 natalDateViewModel.birthTimeField.get())
     }
@@ -313,8 +299,8 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(true),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING, createValidUser()))
 
-        Assert.assertEquals(VALID_LIVING_LOCATION, natalDateViewModel.livingLocationField.get())
-        Assert.assertEquals(VALID_BIRTH_LOCATION, natalDateViewModel.birthLocationField.get())
+        Assert.assertEquals(Constants.VALID_LIVING_LOCATION, natalDateViewModel.livingLocationField.get())
+        Assert.assertEquals(Constants.VALID_BIRTH_LOCATION, natalDateViewModel.birthLocationField.get())
         Assert.assertEquals(VALID_BIRTH_DATE, natalDateViewModel.birthDateField.get())
         Assert.assertEquals(VALID_BIRTH_TIME, natalDateViewModel.birthTimeField.get())
         Assert.assertEquals(resources.getText(R.string.natalType_freeSpirit), natalDateViewModel.typeField.get())
@@ -327,7 +313,7 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(false),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
         natalDateViewModel.birthLocationField.set(INVALID_BIRTH_LOCATION)
@@ -374,7 +360,7 @@ class NatalDateViewModelTest: BaseTest() {
         natalDateViewModel.livingLocationField.set(INVALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(VALID_BIRTH_LOCATION)
+        natalDateViewModel.birthLocationField.set(Constants.VALID_BIRTH_LOCATION)
         natalDateViewModel.birthLocationField.notifyChange()
 
         natalDateViewModel.birthDateField.set(VALID_BIRTH_DATE)
@@ -415,10 +401,10 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(false),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
-        natalDateViewModel.birthLocationField.set(VALID_BIRTH_LOCATION)
+        natalDateViewModel.birthLocationField.set(Constants.VALID_BIRTH_LOCATION)
         natalDateViewModel.birthLocationField.notifyChange()
 
         natalDateViewModel.birthDateField.set(INVALID_BIRTH_DATE)
@@ -462,7 +448,7 @@ class NatalDateViewModelTest: BaseTest() {
                 initNatalDateService(false),
                 initPreferences(com.astrolucis.services.interfaces.Preferences.EMPTY_STRING))
 
-        natalDateViewModel.livingLocationField.set(VALID_LIVING_LOCATION)
+        natalDateViewModel.livingLocationField.set(Constants.VALID_LIVING_LOCATION)
         natalDateViewModel.livingLocationField.notifyChange()
 
         natalDateViewModel.birthLocationField.set(INVALID_BIRTH_LOCATION)
