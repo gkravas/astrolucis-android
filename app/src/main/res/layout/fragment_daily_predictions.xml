@@ -7,15 +7,30 @@
         <import type="com.astrolucis.R"/>
         <variable name="viewModel" type="com.astrolucis.features.dailyPredictionList.DailyPredictionListViewModel"/>
     </data>
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-6040563814771861/4012341016">
+        </com.google.android.gms.ads.AdView>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:paddingTop="@dimen/padding_small"
-            android:clipToPadding="false"/>
-    </android.support.constraint.ConstraintLayout>
+            android:clipToPadding="false"
+            android:layout_alignParentTop="true"
+            tools:listitem="@layout/card_prediction"
+            android:layout_above="@id/adView"/>
+
+    </RelativeLayout>
 </layout>

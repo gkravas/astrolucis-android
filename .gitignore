@@ -38,3 +38,4 @@ local.properties
 fastlane/report\.xml
 
 fastlane/README\.md
+google-services.json

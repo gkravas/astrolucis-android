@@ -1,16 +1,19 @@
 package com.astrolucis.features.home
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.databinding.OnRebindCallback
 import android.databinding.ViewDataBinding
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.transition.TransitionManager
-import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.Toast
+import com.astrolucis.BuildConfig
 import com.astrolucis.R
 import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.ActivityHomeBinding
@@ -21,9 +24,6 @@ import com.astrolucis.features.profile.ProfileFragment
 import com.astrolucis.utils.routing.AppRouter
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
-import android.widget.Toast
-
-
 
 
 class HomeActivity: BaseActivity() {
@@ -31,6 +31,8 @@ class HomeActivity: BaseActivity() {
 
     companion object {
         const val OPEN_NATAL_DATE = "OPEN_NATAL_DATE"
+        const val BLOG_URL = "https://www.gineastrologos.gr"
+        const val GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
     }
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -66,18 +68,23 @@ class HomeActivity: BaseActivity() {
         viewModel.viewState.observeForever( { viewState: HomeViewModel.ViewState? ->
             when (viewState) {
                 HomeViewModel.ViewState.PROFILE -> {
-                    startWithFragment(ProfileFragment())
+                    pushFragment(ProfileFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.profile_menu_item) })
                 }
                 HomeViewModel.ViewState.NATAL_DATE -> {
-                    startWithFragment(NatalDateFragment())
+                    pushFragment(NatalDateFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.natal_date_menu_item) })
                 }
                 HomeViewModel.ViewState.DAILY_PREDICTION_LIST -> {
-                    startWithFragment(DailyPredictionListFragment())
+                    pushFragment(DailyPredictionListFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.daily_prediction_menu_item) })
                 }
-                HomeViewModel.ViewState.LOGOUT -> appRouter.goTo(LoginActivity::class, this)
+                HomeViewModel.ViewState.LOGOUT -> {
+                    appRouter.goTo(LoginActivity::class, this)
+                }
+                HomeViewModel.ViewState.STAY_THERE -> {
+
+                }
             }
         })
 
@@ -87,6 +94,18 @@ class HomeActivity: BaseActivity() {
                 R.id.profile_menu_item -> viewModel.goToProfile()
                 R.id.natal_date_menu_item -> viewModel.goToNatalDate()
                 R.id.daily_prediction_menu_item -> viewModel.goToDailyPrediction()
+                R.id.blog_menu_item -> {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(BLOG_URL))
+                    startActivity(browserIntent)
+                }
+                R.id.share_item -> {
+                    val share = Intent(android.content.Intent.ACTION_SEND)
+                    share.type = "text/plain"
+                    share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+                    share.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.motto))
+                    share.putExtra(Intent.EXTRA_TEXT, GOOGLE_PLAY)
+                    startActivity(Intent.createChooser(share, resources.getString(R.string.drawer_menu_share)))
+                }
             }
             binding.drawerLayout.closeDrawers()
             true
@@ -110,17 +129,13 @@ class HomeActivity: BaseActivity() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            if (isAtRootFragment()) {
-                if (doubleBackToExitPressedOnce) {
-                    moveTaskToBack(true)
-                    return
-                }
-                this.doubleBackToExitPressedOnce = true
-                Toast.makeText(this, R.string.back_again_to_exit, Toast.LENGTH_SHORT).show()
-                Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
-            } else {
-                super.onBackPressed()
+            if (doubleBackToExitPressedOnce) {
+                moveTaskToBack(true)
+                return
             }
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, R.string.back_again_to_exit, Toast.LENGTH_SHORT).show()
+            Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         }
     }
 

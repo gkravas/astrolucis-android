@@ -13,8 +13,12 @@
           android:icon="@drawable/logo_colored"
           android:title="@string/drawer.menu.dailyPredictions"/>
 
+    <item android:id="@+id/share_item"
+          android:icon="@drawable/ic_share"
+          android:title="@string/drawer.menu.share"/>
+
     <item android:id="@+id/blog_menu_item"
-          android:icon="@drawable/ic_logout"
+          android:icon="@drawable/ic_wordpress"
           android:title="@string/drawer.menu.blog"/>
 
     <item android:id="@+id/logout_menu_item"

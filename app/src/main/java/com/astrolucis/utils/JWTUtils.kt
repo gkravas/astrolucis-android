@@ -1,12 +1,11 @@
 package com.astrolucis.utils
 
-import com.astrolucis.utils.routing.AppRouter
 import com.auth0.android.jwt.DecodeException
 import com.auth0.android.jwt.JWT
 
 class JWTUtils {
     companion object {
-        const val MIN_EXPIRED_TIME_SPAN: Long = 60 * 60
+        private const val MIN_EXPIRED_TIME_SPAN: Long = 60 * 60
 
         fun isLoggedIn(token: String): Boolean {
             return try {

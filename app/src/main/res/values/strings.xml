@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Astro Lucis</string>
     <string name="empty"></string>
+    <string name="motto">Δωρεάν προσωπικές αστρολογικές προβλέψεις!</string>
 
     <string name="facebook_app_id">1741917992498773</string>
     <string name="fb_login_protocol_scheme">fb1741917992498773</string>
@@ -86,7 +87,8 @@
     <string name="drawer.menu.profile">Το Προφίλ μου</string>
     <string name="drawer.menu.natalDate">Ο Γεννέθλιος Χάρτης μου</string>
     <string name="drawer.menu.dailyPredictions">Ημερήσιες Προβλέψεις</string>
-    <string name="drawer.menu.blog">Αστρολογία</string>
+    <string name="drawer.menu.blog">Blog</string>
+    <string name="drawer.menu.share">Διέδωσε το App</string>
     <string name="drawer.menu.logout">Έξοδος</string>
     <string name="default_notification_channel_id">default_notification_channel</string>
 

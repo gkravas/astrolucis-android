@@ -15,12 +15,15 @@ import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentDailyPredictionsBinding
 import com.astrolucis.features.dailyPrediction.DailyPredictionActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import org.koin.android.architecture.ext.viewModel
 import java.util.*
 
 class DailyPredictionListFragment : BaseFragment() {
 
-    lateinit var binding: FragmentDailyPredictionsBinding
+    private lateinit var binding: FragmentDailyPredictionsBinding
     val viewModel: DailyPredictionListViewModel by viewModel()
 
     override fun onAttach(context: Context?) {
@@ -36,14 +39,17 @@ class DailyPredictionListFragment : BaseFragment() {
             when(it?.first) {
                 DailyPredictionListViewModel.Action.GO_TO_DAILY_PREDICTION -> {
                     Intent(context, DailyPredictionActivity::class.java).apply {
-                        this.putExtra(DailyPredictionActivity.NATAL_DATE_ID, 1.toLong())
-                        this.putExtra(DailyPredictionActivity.DATE, it.second as Date)
+                        @Suppress("UNCHECKED_CAST")
+                        val value: Pair<Long, Date> = it.second as Pair<Long, Date>
+                        this.putExtra(DailyPredictionActivity.NATAL_DATE_ID, value.first)
+                        this.putExtra(DailyPredictionActivity.DATE, value.second)
                         startActivity(this)
                     }
                 }
             }
         })
         viewModel.initForm()
+        MobileAds.initialize(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,6 +69,9 @@ class DailyPredictionListFragment : BaseFragment() {
         (binding.recyclerView.adapter as DailyPredictionListAdapter).viewModel = viewModel
         binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
         return binding.root
     }

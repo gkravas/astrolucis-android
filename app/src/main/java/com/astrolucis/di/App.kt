@@ -25,7 +25,7 @@ class App : Application() {
     private val appModule : Module = org.koin.dsl.module.applicationContext {
         bean { Preferences(instance) as com.astrolucis.services.interfaces.Preferences }
         bean { GraphQLService(get()) }
-        bean { AppRouter(get(), get()) }
+        bean { AppRouter(get()) }
         bean { NatalDateService(get(), get()) as com.astrolucis.services.interfaces.NatalDateService}
         bean { UserService(get(), get(), get()) as com.astrolucis.services.interfaces.UserService}
         bean { RestService(get(), get()) }
@@ -36,12 +36,12 @@ class App : Application() {
             cookieManager
         }
 
-        viewModel { LoginViewModel(get(), get(), get()) }
-        viewModel { HomeViewModel(get(), get()) }
+        viewModel { LoginViewModel(get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get()) }
         viewModel { NatalDateViewModel(get(), get(), get(), get()) }
         viewModel { ResetPasswordViewModel(get(), get(), get(), get()) }
         viewModel { ProfileViewModel(get(), get(), get()) }
-        viewModel { DailyPredictionListViewModel(get()) }
+        viewModel { DailyPredictionListViewModel(get(), get()) }
         viewModel { DailyPredictionViewModel(get(), get()) }
     }
 
