@@ -41,6 +41,23 @@ class ProfileFragment: BaseFragment() {
                 ProfileViewModel.Action.GO_TO_HOME -> appRouter.goTo(HomeActivity::class, baseActivity)
             }
         })
+
+        viewModel.loadingEmail.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                binding.emailTextView.isEnabled = !it
+                binding.progressBarEmail.visibility = if (it)  View.VISIBLE else View.GONE
+                binding.saveButtonEmail.isEnabled = !it
+            }
+        })
+
+        viewModel.loadingPassword.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                binding.passwordTextView.isEnabled = !it
+                binding.passwordRepeatTextView.isEnabled = !it
+                binding.progressBarPassword.visibility = if (it)  View.VISIBLE else View.GONE
+                binding.saveButtonPassword.isEnabled = !it
+            }
+        })
         viewModel.initForm()
     }
 

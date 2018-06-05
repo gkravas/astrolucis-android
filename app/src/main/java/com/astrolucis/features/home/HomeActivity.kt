@@ -1,5 +1,6 @@
 package com.astrolucis.features.home
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
@@ -21,7 +22,10 @@ import com.astrolucis.features.dailyPredictionList.DailyPredictionListFragment
 import com.astrolucis.features.login.LoginActivity
 import com.astrolucis.features.natalDate.NatalDateFragment
 import com.astrolucis.features.profile.ProfileFragment
+import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
 
@@ -30,9 +34,10 @@ class HomeActivity: BaseActivity() {
 
 
     companion object {
+        const val LATEST_VERSION = "latest_version_android"
         const val OPEN_NATAL_DATE = "OPEN_NATAL_DATE"
         const val BLOG_URL = "https://www.gineastrologos.gr"
-        const val GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+        const val GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}&referrer=utm_source%3DandroidApp"
     }
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
@@ -65,8 +70,8 @@ class HomeActivity: BaseActivity() {
             }
         })
 
-        viewModel.viewState.observeForever( { viewState: HomeViewModel.ViewState? ->
-            when (viewState) {
+        viewModel.viewState.observe(this, Observer {
+            when (it) {
                 HomeViewModel.ViewState.PROFILE -> {
                     pushFragment(ProfileFragment())
                     binding.navigation.post({ binding.navigation.setCheckedItem(R.id.profile_menu_item) })
@@ -82,6 +87,13 @@ class HomeActivity: BaseActivity() {
                 HomeViewModel.ViewState.LOGOUT -> {
                     appRouter.goTo(LoginActivity::class, this)
                 }
+                HomeViewModel.ViewState.SHOW_UPDATE_DIALOG -> {
+                    showAlertDialog(HomeViewModel.UPDATE_DIALOG_ID, AlertDialog.Data(viewModel::class),
+                            R.string.error_defaultTitle, R.string.updateDialog_message)
+                }
+                HomeViewModel.ViewState.GO_TO_GOOGLE_PLAY -> {
+                    openURL(GOOGLE_PLAY)
+                }
                 HomeViewModel.ViewState.STAY_THERE -> {
 
                 }
@@ -95,8 +107,7 @@ class HomeActivity: BaseActivity() {
                 R.id.natal_date_menu_item -> viewModel.goToNatalDate()
                 R.id.daily_prediction_menu_item -> viewModel.goToDailyPrediction()
                 R.id.blog_menu_item -> {
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(BLOG_URL))
-                    startActivity(browserIntent)
+                    openURL(BLOG_URL)
                 }
                 R.id.share_item -> {
                     val share = Intent(android.content.Intent.ACTION_SEND)
@@ -110,6 +121,34 @@ class HomeActivity: BaseActivity() {
             binding.drawerLayout.closeDrawers()
             true
         })
+
+        initFirebaseRemoteConfig()
+    }
+
+    private fun initFirebaseRemoteConfig() {
+        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build()
+
+        firebaseRemoteConfig.setConfigSettings(configSettings)
+        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults)
+        var cacheExpiration: Long = 3600 // 1 hour in seconds.
+        // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
+        // retrieve values from the service.
+        if (firebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0
+        }
+
+
+        firebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        firebaseRemoteConfig.activateFetched()
+                    }
+                    viewModel.showUpgradeDialog(firebaseRemoteConfig.getLong(LATEST_VERSION))
+                }
     }
 
     override fun parseState(state: Bundle) {

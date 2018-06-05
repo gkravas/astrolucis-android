@@ -36,7 +36,8 @@ class LoginViewModel: BaseViewModel {
     }
 
     enum class Action {
-        GO_TO_HOME
+        GO_TO_HOME,
+        OPEN_TERMS
     }
 
     val viewState: ObservableField<ViewState> = ObservableField()
@@ -49,7 +50,6 @@ class LoginViewModel: BaseViewModel {
     val passwordError: ObservableField<CharSequence> = ObservableField("")
     val passwordRepeatError: ObservableField<CharSequence> = ObservableField("")
 
-    val loading: ObservableField<Boolean> = ObservableField(false)
     val actionButtonText: ObservableField<CharSequence> = ObservableField("")
     val toggleStateText: ObservableField<CharSequence> = ObservableField("")
 
@@ -59,6 +59,7 @@ class LoginViewModel: BaseViewModel {
 
     private val disposables = CompositeDisposable()
 
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
     val messagesLiveData: MutableLiveData<ErrorPresentation> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Action> = MutableLiveData()
 
@@ -107,6 +108,7 @@ class LoginViewModel: BaseViewModel {
             }
         })
 
+        this.loading.value = false
         this.viewState.set(ViewState.LOGIN)
     }
 
@@ -151,7 +153,7 @@ class LoginViewModel: BaseViewModel {
         disposables.add(userService.login(emailField.get().toString(), passwordField.get().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         { response -> handleLoginSuccess(response) },
                         { handleError(it) }
@@ -166,7 +168,7 @@ class LoginViewModel: BaseViewModel {
         disposables.add(userService.fbLogin(fbToken!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         { response -> handleLoginSuccess(response) },
                         { handleError(it) }
@@ -182,7 +184,7 @@ class LoginViewModel: BaseViewModel {
         disposables.add(userService.register(emailField.get().toString(), passwordField.get().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         { login() },
                         { handleError(it) }
@@ -197,15 +199,19 @@ class LoginViewModel: BaseViewModel {
         disposables.add(userService.sendResetEmail(emailField.get().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         {
                             messagesLiveData.value = ErrorPresentation(R.string.error_defaultTitle, R.string.login_remindPassword)
-                            loading.set(false)
+                            loading.value = false
                         },
                         { handleError(it) }
                 )
         )
+    }
+
+    fun openTerms() {
+        this.actionsLiveData.value = Action.OPEN_TERMS
     }
 
     fun toggleViewState() {
@@ -236,6 +242,6 @@ class LoginViewModel: BaseViewModel {
 
     private fun handleError(throwable: Throwable) {
         messagesLiveData.value = ErrorHandler.handleLoginRegister(throwable)
-        loading.set(false)
+        loading.value = false
     }
 }

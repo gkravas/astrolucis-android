@@ -76,18 +76,16 @@ class DailyPredictionActivity : BaseActivity() {
         })
 
         viewModel.actionsLiveData.observe(this, Observer {
-            when(it?.first) {
-                DailyPredictionViewModel.Action.RATE_DAILY_PREDICTION -> {
-                    runOnUiThread({
-                        var rating = (it.second as GetDailyPredictionQuery.DailyPrediction).accuracy()
-                        rating = rating ?: 0
-                        RatingAccuracyDialog.newInstance(rating.div(DailyPredictionViewModel.ACCURACY_MULTIPLIER).toInt(),
-                                resources.getString(R.string.dailyPrediction_ratingDialog_title),
-                                resources.getString(android.R.string.ok),
-                                resources.getString(android.R.string.cancel))
-                                .show(supportFragmentManager, RatingAccuracyDialog.RATING_DIALOG_ID)
-                    })
-                }
+            if (it?.first == DailyPredictionViewModel.Action.RATE_DAILY_PREDICTION) {
+                runOnUiThread({
+                    var rating = (it.second as GetDailyPredictionQuery.DailyPrediction).accuracy()
+                    rating = rating ?: 0
+                    RatingAccuracyDialog.newInstance(rating.div(DailyPredictionViewModel.ACCURACY_MULTIPLIER).toInt(),
+                            resources.getString(R.string.dailyPrediction_ratingDialog_title),
+                            resources.getString(android.R.string.ok),
+                            resources.getString(android.R.string.cancel))
+                            .show(supportFragmentManager, RatingAccuracyDialog.RATING_DIALOG_ID)
+                })
             }
         })
 

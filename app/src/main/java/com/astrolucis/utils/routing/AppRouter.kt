@@ -9,13 +9,8 @@ import com.astrolucis.exceptions.RoutingException
 import com.astrolucis.features.home.HomeActivity
 import com.astrolucis.features.login.LoginActivity
 import com.astrolucis.features.resetPassword.ResetPasswordActivity
-import com.astrolucis.fragment.UserFragment
-import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.utils.JWTUtils
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.isSuperclassOf

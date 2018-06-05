@@ -52,6 +52,13 @@ class NatalDateFragment : BaseFragment() {
                 baseActivity.showAlertDialog(it.dialogId, AlertDialog.Data(viewModel::class), it.titleResId, it.messageResId)
             }
         })
+
+        viewModel.loading.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                binding.progressBar.visibility = if (it)  View.VISIBLE else View.GONE
+                binding.saveButton.isEnabled = !it
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -77,7 +84,7 @@ class NatalDateFragment : BaseFragment() {
     private fun openDatePicker() {
         val now = Calendar.getInstance()
         val dpd = DatePickerDialog.newInstance(
-                { view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                { _: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
                     binding.birthDateTextView.setText("${"%02d".format(dayOfMonth)}/${"%02d".format(monthOfYear + 1)}/${year} ")
                     if (!TextUtils.isEmpty(binding.birthTimeTextView.text)) {
                         openTimePicker()
@@ -90,7 +97,7 @@ class NatalDateFragment : BaseFragment() {
     private fun openTimePicker() {
         val now = Calendar.getInstance()
         val dpd = TimePickerDialog.newInstance(
-                { view: TimePickerDialog?, hourOfDay: Int, minute: Int, second: Int ->
+                { _: TimePickerDialog?, hourOfDay: Int, minute: Int, _: Int ->
                     binding.birthTimeTextView.setText("${"%02d".format(hourOfDay)}:${"%02d".format(minute)}")
                     if (!TextUtils.isEmpty(binding.typeAutoComplete.text)) {
                         openTypePicker()

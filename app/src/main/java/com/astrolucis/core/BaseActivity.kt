@@ -1,5 +1,7 @@
 package com.astrolucis.core
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
@@ -7,10 +9,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import com.astrolucis.R
-import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.dialogs.AlertDialog
-import kotlin.reflect.KClass
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -109,5 +108,10 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun openURL(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
     }
 }

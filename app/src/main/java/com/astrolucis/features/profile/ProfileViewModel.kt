@@ -41,14 +41,13 @@ class ProfileViewModel: BaseViewModel {
     val passwordError: ObservableField<CharSequence> = ObservableField("")
     val passwordRepeatError: ObservableField<CharSequence> = ObservableField("")
 
-    val loadingEmail: ObservableField<Boolean> = ObservableField(false)
-    val loadingPassword: ObservableField<Boolean> = ObservableField(false)
-
     private val userService: UserService
     private val natalDateService: NatalDateService
 
     private val disposables = CompositeDisposable()
 
+    val loadingEmail: MutableLiveData<Boolean> = MutableLiveData()
+    val loadingPassword: MutableLiveData<Boolean> = MutableLiveData()
     val messagesLiveData: MutableLiveData<ErrorPresentation> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Action> = MutableLiveData()
 
@@ -75,6 +74,9 @@ class ProfileViewModel: BaseViewModel {
                 validatePasswordRepeat()
             }
         })
+
+        loadingEmail.value = false
+        loadingPassword.value = false
     }
 
     override fun onCleared() {
@@ -117,10 +119,10 @@ class ProfileViewModel: BaseViewModel {
         disposables.add(userService.changeEmail(emailField.get().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loadingEmail.set(true) })
+                .doOnSubscribe({ loadingEmail.value = true })
                 .subscribe(
                         {
-                            loadingEmail.set(false)
+                            loadingEmail.value = false
                             messagesLiveData.value = ErrorPresentation(R.string.success_defaultTitle,
                                     R.string.profile_changeEmailSuccess_text)
                         },
@@ -136,10 +138,10 @@ class ProfileViewModel: BaseViewModel {
         disposables.add(userService.resetPassword(passwordField.get().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loadingPassword.set(true) })
+                .doOnSubscribe({ loadingPassword.value = true })
                 .subscribe(
                         {
-                            loadingPassword.set(false)
+                            loadingPassword.value = false
                             messagesLiveData.value = ErrorPresentation(R.string.success_defaultTitle,
                                         R.string.profile_changePasswordSuccess_text)
                         },
@@ -153,14 +155,14 @@ class ProfileViewModel: BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    loadingEmail.set(true)
-                    loadingPassword.set(true)
+                    loadingEmail.value = true
+                    loadingPassword.value = true
                 })
                 .subscribe(
                         { me ->
                             emailField.set(me.email())
-                            loadingEmail.set(false)
-                            loadingPassword.set(false)
+                            loadingEmail.value = false
+                            loadingPassword.value = false
                         },
                         { handleError(it) }
                 ))
@@ -168,8 +170,8 @@ class ProfileViewModel: BaseViewModel {
 
     private fun handleError(throwable: Throwable) {
         messagesLiveData.value = ErrorHandler.handleLoginRegister(throwable)
-        loadingEmail.set(false)
-        loadingPassword.set(false)
+        loadingEmail.value = false
+        loadingPassword.value = false
     }
 
     override fun onDialogAction(id: String, positive: Boolean) {

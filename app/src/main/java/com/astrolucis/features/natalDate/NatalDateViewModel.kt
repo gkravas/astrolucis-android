@@ -10,6 +10,7 @@ import com.astrolucis.core.BaseViewModel
 import com.astrolucis.di.App
 import com.astrolucis.fragment.NatalDateFragment
 import com.astrolucis.models.NatalType
+import com.astrolucis.models.natalDate.Chart
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
@@ -17,9 +18,11 @@ import com.astrolucis.utils.ErrorHandler
 import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.dialogs.AlertDialog.Companion.LOGOUT_DIALOG_ID
 import com.astrolucis.utils.validators.EmptyValidator
+import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.json.JSONObject
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,7 +59,7 @@ class NatalDateViewModel : BaseViewModel {
     val birthLocationError: ObservableField<CharSequence>
     val birthDateError: ObservableField<CharSequence>
     val birthTimeError: ObservableField<CharSequence>
-    val loading: ObservableField<Boolean>
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
 
     val disposables = CompositeDisposable()
 
@@ -82,8 +85,7 @@ class NatalDateViewModel : BaseViewModel {
         this.birthDateError = ObservableField("")
         this.birthTimeError = ObservableField("")
 
-        this.loading = ObservableField(false)
-
+        this.loading.value = false
 
         this.livingLocationField.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(field: Observable?, arg: Int) {
@@ -116,7 +118,7 @@ class NatalDateViewModel : BaseViewModel {
         disposables.add(natalDateService.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         { me ->
                             showNatalDate(me?.location(),
@@ -124,11 +126,11 @@ class NatalDateViewModel : BaseViewModel {
                                             ?.firstOrNull()
                                             ?.fragments()
                                             ?.natalDateFragment())
-                            loading.set(false)
+                            loading.value = false
                         },
                         { throwable ->
                             messagesLiveData.value = ErrorHandler.handleNatalDateError(throwable)
-                            loading.set(false)
+                            loading.value = false
                         }
                 ))
     }
@@ -142,15 +144,16 @@ class NatalDateViewModel : BaseViewModel {
         birthLocationField.set(natalDate?.location().orEmpty())
         livingLocationField.set(livingLocationFinal)
 
-        val parsedDate: Date? = natalDate?.date()?.let { parseServerDate(it) }
+        val parsedDate: Date? = natalDate?.date()?.let { parseServerDate(it, natalDate.timezoneMinutesDifference()) }
 
         if (parsedDate == null) {
             nameField.set(DEFAULT_NAME)
             birthTimeField.set(context.getText(R.string.natalDate_defaultTime))
         } else {
+            val locale = Locale("el-GR")
             nameField.set(natalDate.name())
-            birthDateField.set(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(parsedDate))
-            birthTimeField.set(SimpleDateFormat("HH:mm", Locale.getDefault()).format(parsedDate))
+            birthDateField.set(SimpleDateFormat("dd/MM/yyyy", locale).format(parsedDate))
+            birthTimeField.set(SimpleDateFormat("HH:mm", locale).format(parsedDate))
         }
 
         getApplication<App>().applicationContext.let { context ->
@@ -217,9 +220,13 @@ class NatalDateViewModel : BaseViewModel {
         actionsLiveData.value = Action.OPEN_TYPE_PICKER
     }
 
-    private fun parseServerDate(date: String): Date? {
+    private fun parseServerDate(date: String, timezoneMinutesDifference: Long): Date? {
         return try {
-            SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss").parse(date)
+            val time: Date = SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss").parse(date)
+            val cal: Calendar = Calendar.getInstance()
+            cal.time = time
+            cal.add(Calendar.SECOND, timezoneMinutesDifference.toInt())
+            cal.time
         } catch (e: ParseException) {
             null
         }
@@ -249,7 +256,7 @@ class NatalDateViewModel : BaseViewModel {
         val birthLocation = birthLocationField.get().toString()
         val name = nameField.get().toString()
         val type: String = NatalType.findBy(typeField.get().toString(), getApplication<App>().applicationContext)?.value ?: ""
-""
+
         val createUpdateNatalDate = if (id == null) {
             natalDateService.createNatalDateMutation(date, birthLocation, name, true, type)
         } else {
@@ -259,18 +266,18 @@ class NatalDateViewModel : BaseViewModel {
                 .flatMap { createUpdateNatalDate }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         {
                             messagesLiveData.value = ErrorPresentation(R.string.success_defaultTitle,
                                     R.string.natalDate_natalDateSaveComplete_text,
                                     SAVE_COMPLETE_DIALOG_ID)
                             showNatalDate(livingLocationField.get().toString(), it)
-                            loading.set(false)
+                            loading.value = false
                         },
                         { throwable ->
                             messagesLiveData.value = ErrorHandler.handleNatalDateError(throwable)
-                            loading.set(false)
+                            loading.value = false
                         }
                 )
         )

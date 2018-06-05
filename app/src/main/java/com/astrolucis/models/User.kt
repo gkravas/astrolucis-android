@@ -4,8 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 public data class User(@SerializedName("id") val id: Long,
-                @SerializedName("email") val email: String,
-                @SerializedName("natalDates") val natalDates: Array<NatalDate>) {
+                @SerializedName("email") val email: String) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -15,7 +14,6 @@ public data class User(@SerializedName("id") val id: Long,
 
         if (id != other.id) return false
         if (email != other.email) return false
-        if (!Arrays.equals(natalDates, other.natalDates)) return false
 
         return true
     }
@@ -23,7 +21,6 @@ public data class User(@SerializedName("id") val id: Long,
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + email.hashCode()
-        result = 31 * result + Arrays.hashCode(natalDates)
         return result
     }
 }

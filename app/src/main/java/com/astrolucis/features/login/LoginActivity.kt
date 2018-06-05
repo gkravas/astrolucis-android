@@ -7,6 +7,8 @@ import android.databinding.OnRebindCallback
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.transition.TransitionManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.astrolucis.R
 import com.astrolucis.core.BaseActivity
@@ -29,6 +31,7 @@ class LoginActivity : BaseActivity() {
     companion object {
         const val FB_EMAIL_PERMISSION: String = "email"
         const val FB_PUBLIC_PROFILE_PERMISSION: String = "public_profile"
+        const val TERMS_URL: String = "https://astrolucis.gr/terms"
     }
 
     lateinit var binding: ActivityLoginBinding
@@ -62,6 +65,21 @@ class LoginActivity : BaseActivity() {
         viewModel.actionsLiveData.observe(this, Observer {
             when(it) {
                 LoginViewModel.Action.GO_TO_HOME -> appRouter.goTo(HomeActivity::class, this)
+                LoginViewModel.Action.OPEN_TERMS -> openURL(TERMS_URL)
+            }
+        })
+
+        viewModel.loading.observe(this, Observer {
+            it?.let {
+                binding.emailTextView.isEnabled = !it
+                binding.passwordTextView.isEnabled = !it
+                binding.passwordRepeatTextView.isEnabled = !it
+                binding.fbLoginButton.visibility = if (it) GONE else VISIBLE
+                binding.toggleStateButton.visibility = if (it) GONE else VISIBLE
+                binding.saveButton.visibility = if (it) GONE else VISIBLE
+                binding.progressBar.visibility = if (!it) GONE else VISIBLE
+                binding.forgotPasswordButton.visibility = if (it) GONE else VISIBLE
+                binding.openTermsButton.visibility = if (it) GONE else VISIBLE
             }
         })
 

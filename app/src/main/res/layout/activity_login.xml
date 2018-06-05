@@ -38,7 +38,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:hint="@string/login.email.hint"
-                        android:enabled="@{!viewModel.loading.get()}"
                         android:text="@={viewModel.emailField}"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -55,7 +54,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:hint="@string/login.password.hint"
-                        android:enabled="@{!viewModel.loading.get()}"
                         android:text="@={viewModel.passwordField}"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -73,26 +71,25 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:hint="@string/login.passwordRepeat.hint"
-                        android:enabled="@{!viewModel.loading.get()}"
                         android:text="@={viewModel.passwordRepeatField}"/>
 
                 </android.support.design.widget.TextInputLayout>
 
                 <ProgressBar
+                    android:id="@+id/progress_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:indeterminate="true"
                     android:layout_marginTop="@dimen/padding_medium"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    app:visibilityGone="@{viewModel.loading.get()}"/>
+                    android:layout_marginBottom="@dimen/padding_medium"/>
 
                 <Button
+                    android:id="@+id/save_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Base.Widget.AppCompat.Button.Colored"
                     android:text="@{viewModel.actionButtonText}"
-                    app:visibilityGone="@{!viewModel.loading.get()}"
                     android:onClick="@{(v) -> viewModel.loginRegister()}"/>
 
                 <com.facebook.login.widget.LoginButton
@@ -102,25 +99,31 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginStart="@dimen/padding_tiny"
                     android:layout_marginEnd="@dimen/padding_tiny"
-                    android:layout_marginTop="10dp"
-                    app:visibilityGone="@{!viewModel.loading.get()}"/>
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
+                    android:id="@+id/toggle_state_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/min_touchable_height"
                     android:gravity="center"
                     android:text="@{viewModel.toggleStateText}"
-                    app:visibilityGone="@{!viewModel.loading.get()}"
                     android:onClick="@{(v) -> viewModel.toggleViewState()}"/>
 
                 <TextView
+                    android:id="@+id/forgot_password_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/min_touchable_height"
                     android:gravity="center"
                     android:text="@string/login.forgotPassword"
-                    app:visibilityGone="@{viewModel.viewState != ViewState.REGISTER &amp;&amp; !viewModel.loading.get()}"
                     android:onClick="@{(v) -> viewModel.sendForgotPassword()}"/>
 
+                <TextView
+                    android:id="@+id/open_terms_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/login.terms"
+                    android:onClick="@{(v) -> viewModel.openTerms()}"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </android.support.design.widget.CoordinatorLayout>

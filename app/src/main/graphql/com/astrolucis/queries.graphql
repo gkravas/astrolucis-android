@@ -45,9 +45,12 @@ fragment NatalDateFragment on NatalDate {
     location
     primary
     type
+    chart
+    timezoneMinutesDifference
 }
 
 fragment UserFragment on User {
+    id,
     email,
     location,
     natalDates {

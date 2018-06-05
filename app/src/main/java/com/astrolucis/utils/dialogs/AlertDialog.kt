@@ -3,6 +3,7 @@ package com.astrolucis.utils.dialogs
 import android.app.Dialog
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatDialogFragment
 import com.astrolucis.core.BaseViewModel
 import org.koin.android.architecture.ext.KoinFactory
@@ -53,7 +54,6 @@ class AlertDialog: AppCompatDialogFragment() {
             } catch (e: RuntimeException) {
                 ViewModelProviders.of(this, KoinFactory)[data.viewModelClass.java]
             }
-
         }
     }
 
@@ -72,7 +72,8 @@ class AlertDialog: AppCompatDialogFragment() {
             val okLemma = it[OK] as String
             if (okLemma.isNotEmpty()) {
                 builder.setPositiveButton(okLemma) { _, _ ->
-                    this.targetFragment?.activity?.runOnUiThread({
+                    val activity: FragmentActivity = this.targetFragment?.activity?.let { it } ?: this.requireActivity()
+                    activity.runOnUiThread({
                         viewModel.onDialogAction(id, true)
                     })
                 }
@@ -80,7 +81,8 @@ class AlertDialog: AppCompatDialogFragment() {
             val cancelLemma = it[CANCEL] as String
             if (cancelLemma.isNotEmpty()) {
                 builder.setNegativeButton(cancelLemma) { _, _ ->
-                    this.targetFragment?.activity?.runOnUiThread({
+                    val activity: FragmentActivity = this.targetFragment?.activity?.let { it } ?: this.requireActivity()
+                    activity?.runOnUiThread({
                         viewModel.onDialogAction(id, false)
                     })
                 }

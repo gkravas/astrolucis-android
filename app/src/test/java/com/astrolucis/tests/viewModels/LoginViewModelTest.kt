@@ -69,7 +69,7 @@ class LoginViewModelTest: BaseTest() {
     }
     private fun initUserService(): UserService {
         return mock {
-            on { login(VALID_EMAIL, VALID_PASSWORD) } doReturn Observable.just(LoginResponse(User(1, VALID_EMAIL, arrayOf()), ""))
+            on { login(VALID_EMAIL, VALID_PASSWORD) } doReturn Observable.just(LoginResponse(User(1, VALID_EMAIL), ""))
             on { register(VALID_EMAIL, VALID_PASSWORD) } doReturn Observable.just("")
             on { sendResetEmail(VALID_EMAIL) } doReturn Observable.just("")
             on { login(NO_USER_EMAIL, NO_USER_PASSWORD) } doReturn Observable.error(ErrorFactory.createInvalidCredentialsError())

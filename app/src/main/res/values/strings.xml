@@ -20,8 +20,7 @@
     <string name="login.registerHint">Δεν έχω λογαριασμό. <b>Εγγραφή!</b></string>
     <string name="login.loginHint">Έχω ήδη λογαριασμό. <b>Είσοδος!</b></string>
     <string name="login.forgotPassword">Ξέχασα τον κωδικό μου. <b>Αλλαγή κωδικού!</b></string>
-
-
+    <string name="login.terms">Διάβασε τους <b>όρους χρήσης</b> της εφαρμογής</string>
 
     <string name="login.email.validationError">Το email δεν είναι έγκυρο</string>
     <string name="login.email.emptyError">Το email δεν μπορεί να είναι κενό</string>
@@ -93,6 +92,7 @@
     <string name="default_notification_channel_id">default_notification_channel</string>
 
     <string name="success.defaultTitle">Επιτυχία</string>
+    <string name="updateDialog.message">Υπάρχει νέα έκδοση διαθέσιμη, θα ήθελες να αναβαθμίσεις την εφαρμογή;</string>
     <!-- ERRORS -->
     <string name="error.defaultTitle">Προσοχή</string>
     <string name="error.invalidCredential">Το email ή ο κωδικός πρόσβασης δεν είναι σωστά!</string>

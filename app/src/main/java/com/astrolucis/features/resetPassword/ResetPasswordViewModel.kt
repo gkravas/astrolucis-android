@@ -42,14 +42,13 @@ class ResetPasswordViewModel: BaseViewModel {
     val passwordError: ObservableField<CharSequence> = ObservableField("")
     val passwordRepeatError: ObservableField<CharSequence> = ObservableField("")
 
-    val loading: ObservableField<Boolean> = ObservableField(false)
-
     private val userService: UserService
     private val natalDateService: NatalDateService
     val preferences: Preferences
 
     private val disposables = CompositeDisposable()
 
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
     val messagesLiveData: MutableLiveData<ErrorPresentation> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Action> = MutableLiveData()
 
@@ -77,6 +76,8 @@ class ResetPasswordViewModel: BaseViewModel {
                 validatePasswordRepeat()
             }
         })
+
+        loading.value = false
     }
 
     override fun onCleared() {
@@ -123,10 +124,10 @@ class ResetPasswordViewModel: BaseViewModel {
         disposables.add(userService.resetPassword(passwordField.get().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         {
-                            loading.set(false)
+                            loading.value = false
                             preferences.reset()
                             actionsLiveData.value = Action.GO_TO_HOME
                         },
@@ -154,22 +155,22 @@ class ResetPasswordViewModel: BaseViewModel {
         disposables.add(natalDateService.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.set(true) })
+                .doOnSubscribe({ loading.value = true })
                 .subscribe(
                         { me ->
                             emailField.set(me.email())
-                            loading.set(false)
+                            loading.value = false
                         },
                         { throwable ->
                             messagesLiveData.value = ErrorHandler.handleNatalDateError(throwable)
-                            loading.set(false)
+                            loading.value = false
                         }
                 ))
     }
 
     private fun handleError(throwable: Throwable) {
         messagesLiveData.value = ErrorHandler.handleLoginRegister(throwable)
-        loading.set(false)
+        loading.value = false
     }
 
     override fun onDialogAction(id: String, positive: Boolean) {

@@ -55,26 +55,25 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="textEmailAddress"
                                 android:hint="@string/login.email.hint"
-                                android:enabled="@{!viewModel.loadingEmail.get()}"
                                 android:text="@={viewModel.emailField}"/>
 
                         </android.support.design.widget.TextInputLayout>
 
                         <ProgressBar
+                            android:id="@+id/progress_bar_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:indeterminate="true"
                             android:layout_marginTop="@dimen/padding_medium"
-                            android:layout_marginBottom="@dimen/padding_medium"
-                            app:visibilityGone="@{viewModel.loadingEmail.get()}"/>
+                            android:layout_marginBottom="@dimen/padding_medium"/>
 
                         <Button
+                            android:id="@+id/save_button_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:text="@string/profile.changeEmailButton.text"
-                            app:visibilityGone="@{!viewModel.loadingEmail.get()}"
                             android:onClick="@{(v) -> viewModel.changeEmail()}"/>
 
                     </LinearLayout>
@@ -114,7 +113,6 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="textPassword"
                                 android:hint="@string/login.password.hint"
-                                android:enabled="@{!viewModel.loadingPassword.get()}"
                                 android:text="@={viewModel.passwordField}"/>
 
                         </android.support.design.widget.TextInputLayout>
@@ -131,26 +129,25 @@
                                 android:layout_height="wrap_content"
                                 android:inputType="textPassword"
                                 android:hint="@string/login.passwordRepeat.hint"
-                                android:enabled="@{!viewModel.loadingPassword.get()}"
                                 android:text="@={viewModel.passwordRepeatField}"/>
 
                         </android.support.design.widget.TextInputLayout>
 
                         <ProgressBar
+                            android:id="@+id/progress_bar_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:indeterminate="true"
                             android:layout_marginTop="@dimen/padding_medium"
-                            android:layout_marginBottom="@dimen/padding_medium"
-                            app:visibilityGone="@{viewModel.loadingPassword.get()}"/>
+                            android:layout_marginBottom="@dimen/padding_medium"/>
 
                         <Button
+                            android:id="@+id/save_button_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/Base.Widget.AppCompat.Button.Colored"
                             android:text="@string/profile.changePasswordButton.text"
-                            app:visibilityGone="@{!viewModel.loadingPassword.get()}"
                             android:onClick="@{(v) -> viewModel.changePassword()}"/>
 
                     </LinearLayout>

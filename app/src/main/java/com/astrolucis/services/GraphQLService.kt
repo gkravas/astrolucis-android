@@ -2,6 +2,8 @@ package com.astrolucis.services
 
 import com.apollographql.apollo.ApolloClient
 import com.astrolucis.BuildConfig
+import com.astrolucis.type.CustomType
+import com.astrolucis.utils.JsonCustomTypeAdapter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.cert.X509Certificate
@@ -25,6 +27,7 @@ class GraphQLService {
         this.apolloClient = ApolloClient.builder()
                 .serverUrl(BuildConfig.BASE_URL+ "/graphql")
                 .okHttpClient(getHttpClientBuilder())
+                .addCustomTypeAdapter(CustomType.CHART, JsonCustomTypeAdapter())
                 .build()
     }
 
@@ -74,7 +77,7 @@ class GraphQLService {
 
             val builder = OkHttpClient.Builder()
             builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-            builder.hostnameVerifier { hostname, session -> true }
+            builder.hostnameVerifier { _, _ -> true }
 
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY

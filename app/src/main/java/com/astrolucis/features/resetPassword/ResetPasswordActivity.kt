@@ -6,6 +6,7 @@ import android.databinding.OnRebindCallback
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.transition.TransitionManager
+import android.view.View
 import android.view.ViewGroup
 import com.astrolucis.R
 import com.astrolucis.core.BaseActivity
@@ -54,6 +55,12 @@ class ResetPasswordActivity: BaseActivity() {
             }
         })
 
+        viewModel.loading.observe(this, Observer {
+            it?.let {
+                binding.progressBar.visibility = if (it)  View.VISIBLE else View.GONE
+                binding.saveButton.isEnabled = !it
+            }
+        })
         viewModel.initForm()
     }
 

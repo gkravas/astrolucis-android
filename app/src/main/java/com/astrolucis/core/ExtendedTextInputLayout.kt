@@ -22,7 +22,7 @@ open class ExtendedTextInputLayout : TextInputLayout {
     private var _helperTextColor: ColorStateList? = null
     private var _helperTextEnabled = false
     private var _helperTextView = TextView(context).apply {
-        setTextAppearance(_helperTextAppearance)
+        TextViewCompat.setTextAppearance(this, _helperTextAppearance)
         this@ExtendedTextInputLayout.addView(this)
     }
 
