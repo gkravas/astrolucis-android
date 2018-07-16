@@ -31,16 +31,11 @@
     <string name="login.remindPassword">Μόλις σου αποστείλαμε email για την αλλαγή του κωδικού σου.</string>
 
     <!-- NATAL DATES -->
-    <string-array name="natalTypes">
-        <item></item>
-        <item>Άνδρας</item>
-        <item>Γυναίκα</item>
-        <item>Ελεύθερη Ψυχή</item>
-    </string-array>
 
     <string name="natalType.male">Άνδρας</string>
     <string name="natalType.female">Γυναίκα</string>
     <string name="natalType.freeSpirit">Ελεύθερη Ψυχή</string>
+    <string name="natalType.unknown">άγνωστο</string>
 
     <string name="natalDate.livingLocation.emptyError">Ο τόπος κατοικίας δεν μπορεί να είναι κενός</string>
     <string name="natalDate.livingLocation.helper">Μπορείς να εισάγεις οποιοδήποτε μέρος στον κόσμο</string>

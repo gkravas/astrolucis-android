@@ -7,11 +7,13 @@ import com.astrolucis.core.BaseViewModel
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.google.firebase.analytics.FirebaseAnalytics
+import java.util.*
 
 class HomeViewModel: BaseViewModel {
 
     companion object {
         const val UPDATE_DIALOG_ID: String = "updateDialogId"
+        const val USER_LANGUAGE: String = "UserLanguage"
     }
     enum class ViewState {
         STAY_THERE,
@@ -32,8 +34,11 @@ class HomeViewModel: BaseViewModel {
         this.userService = userService
         this.preferences = preferences
 
-        preferences.me?.let {
-            FirebaseAnalytics.getInstance(application).setUserId(it.id().toString())
+        preferences.me?.let { userFragment ->
+            FirebaseAnalytics.getInstance(application).also { firebaseAnalytics ->
+                firebaseAnalytics.setUserId(userFragment.id().toString())
+                firebaseAnalytics.setUserProperty(USER_LANGUAGE, Locale.getDefault().displayLanguage)
+            }
         }
     }
 

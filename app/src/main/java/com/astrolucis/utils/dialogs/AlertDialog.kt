@@ -50,12 +50,16 @@ class AlertDialog: AppCompatDialogFragment() {
         val data = arguments!![DATA]
         if (data is Data<*>) {
             viewModel = try {
-                ViewModelProviders.of(requireActivity(), KoinFactory)[data.viewModelClass.java]
+                targetFragment?.let {
+                    ViewModelProviders.of(it, KoinFactory)[data.viewModelClass.java]
+                } ?: ViewModelProviders.of(requireActivity(), KoinFactory)[data.viewModelClass.java]
             } catch (e: RuntimeException) {
-                ViewModelProviders.of(this, KoinFactory)[data.viewModelClass.java]
+                ViewModelProviders.of(requireActivity(), KoinFactory)[data.viewModelClass.java]
             }
         }
     }
+
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = android.support.v7.app.AlertDialog.Builder(activity!!)

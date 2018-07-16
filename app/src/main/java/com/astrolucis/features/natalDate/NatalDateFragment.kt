@@ -9,10 +9,13 @@ import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentNatalDateBinding
 import com.astrolucis.features.home.HomeActivity
+import com.astrolucis.models.NatalType
 import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -20,6 +23,10 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
 import java.util.*
+import fr.ganfra.materialspinner.MaterialSpinner
+import android.widget.ArrayAdapter
+
+
 
 
 class NatalDateFragment : BaseFragment() {
@@ -49,7 +56,7 @@ class NatalDateFragment : BaseFragment() {
         })
         viewModel.messagesLiveData.observe(this, android.arch.lifecycle.Observer {
             it?.let {
-                baseActivity.showAlertDialog(it.dialogId, AlertDialog.Data(viewModel::class), it.titleResId, it.messageResId)
+                showAlertDialog(this@NatalDateFragment, it.dialogId, AlertDialog.Data(viewModel::class), it.titleResId, it.messageResId)
             }
         })
 
@@ -59,6 +66,20 @@ class NatalDateFragment : BaseFragment() {
                 binding.saveButton.isEnabled = !it
             }
         })
+
+        viewModel.typeField.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                binding.typeAutoComplete.setSelection(it)
+            }
+        })
+
+        viewModel.types.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, it)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.typeAutoComplete.adapter = adapter
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,6 +87,7 @@ class NatalDateFragment : BaseFragment() {
 
         binding.viewModel = viewModel
         binding.executePendingBindings()
+        binding.setLifecycleOwner(this)
 
         binding.addOnRebindCallback(object : OnRebindCallback<ViewDataBinding>() {
             override fun onPreBind(binding: ViewDataBinding?): Boolean {
@@ -74,6 +96,7 @@ class NatalDateFragment : BaseFragment() {
             }
         })
 
+        //binding.typeAutoComplete.onFocusChangeListener = viewModel.onFocusChangeListener()
         //make them non editable
         binding.birthDateTextView.keyListener = null
         binding.birthTimeTextView.keyListener = null
@@ -99,7 +122,7 @@ class NatalDateFragment : BaseFragment() {
         val dpd = TimePickerDialog.newInstance(
                 { _: TimePickerDialog?, hourOfDay: Int, minute: Int, _: Int ->
                     binding.birthTimeTextView.setText("${"%02d".format(hourOfDay)}:${"%02d".format(minute)}")
-                    if (!TextUtils.isEmpty(binding.typeAutoComplete.text)) {
+                    if (!TextUtils.isEmpty(binding.typeAutoComplete.selectedItem as CharSequence?)) {
                         openTypePicker()
                     }
                 }, now.get(Calendar.HOUR), now.get(Calendar.MINUTE), true)
@@ -108,7 +131,7 @@ class NatalDateFragment : BaseFragment() {
     }
 
     private fun openTypePicker() {
-        binding.typeAutoComplete.showDropDown()
+        binding.typeAutoComplete.performClick()
     }
 
     private fun goToHome() {

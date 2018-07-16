@@ -156,11 +156,20 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/padding_medium">
+                            android:layout_height="wrap_content">
 
-                            <AutoCompleteTextView
+                            <fr.ganfra.materialspinner.MaterialSpinner
                                 android:id="@+id/type_auto_complete"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/padding_tiny"
+                                android:selectedItemPosition="@={viewModel.typeField}"
+                                app:ms_hint="@string/natalDate.type.hint"
+                                app:ms_multiline="false"
+                                android:onFocusChange="@{viewModel.onFocusChangeListener}"/>
+                            <!--
+                            <AutoCompleteTextView
+                                android:id="@+id/type_auto_complete1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/natalDate.type.hint"
@@ -168,7 +177,7 @@
                                 android:text="@={viewModel.typeField}"
                                 android:inputType="none"
                                 android:lines="1"
-                                app:onFocusChange="@{viewModel.onFocusChangeListener}"/>
+                                app:onFocusChange="@{viewModel.onFocusChangeListener}"/>-->
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -185,6 +194,7 @@
                         android:layout_height="wrap_content"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:indeterminate="true"
+                        android:visibility="gone"
                         android:layout_marginTop="@dimen/padding_medium"/>
 
                     <Button

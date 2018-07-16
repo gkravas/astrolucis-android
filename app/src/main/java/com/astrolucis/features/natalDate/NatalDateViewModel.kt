@@ -23,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
+import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -53,13 +54,14 @@ class NatalDateViewModel : BaseViewModel {
     val birthLocationField: ObservableField<CharSequence>
     val birthDateField: ObservableField<CharSequence>
     val birthTimeField: ObservableField<CharSequence>
-    val typeField: ObservableField<CharSequence>
 
     val livingLocationError: ObservableField<CharSequence>
     val birthLocationError: ObservableField<CharSequence>
     val birthDateError: ObservableField<CharSequence>
     val birthTimeError: ObservableField<CharSequence>
     val loading: MutableLiveData<Boolean> = MutableLiveData()
+    val typeField: MutableLiveData<Int> = MutableLiveData()
+    val types: MutableLiveData<List<String>> = MutableLiveData()
 
     val disposables = CompositeDisposable()
 
@@ -78,14 +80,18 @@ class NatalDateViewModel : BaseViewModel {
         this.birthLocationField = ObservableField("")
         this.birthDateField = ObservableField("")
         this.birthTimeField = ObservableField("")
-        this.typeField = ObservableField("")
 
         this.livingLocationError = ObservableField("")
         this.birthLocationError = ObservableField("")
         this.birthDateError = ObservableField("")
         this.birthTimeError = ObservableField("")
 
-        this.loading.value = false
+        this.loading.postValue(false)
+
+        this.typeField.value = 0
+        this.types.value = NatalType.values()
+                .filter { it != NatalType.UNKNOWN }
+                .map { application.resources.getString(it.resourceId) }
 
         this.livingLocationField.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(field: Observable?, arg: Int) {
@@ -146,6 +152,7 @@ class NatalDateViewModel : BaseViewModel {
 
         val parsedDate: Date? = natalDate?.date()?.let { parseServerDate(it, natalDate.timezoneMinutesDifference()) }
 
+        val type: NatalType = NatalType.findBy(natalDate?.type().toString())
         if (parsedDate == null) {
             nameField.set(DEFAULT_NAME)
             birthTimeField.set(context.getText(R.string.natalDate_defaultTime))
@@ -156,19 +163,15 @@ class NatalDateViewModel : BaseViewModel {
             birthTimeField.set(SimpleDateFormat("HH:mm", locale).format(parsedDate))
         }
 
-        getApplication<App>().applicationContext.let { context ->
-            typeField.set(NatalType.findBy(natalDate?.type().toString())?.resourceId?.let {
-                resourceId -> context.resources.getString(resourceId)
-            })
-        }
-
         idField.notifyChange()
         nameField.notifyChange()
         livingLocationField.notifyChange()
         birthLocationField.notifyChange()
         birthDateField.notifyChange()
         birthTimeField.notifyChange()
-        typeField.notifyChange()
+        types.value?.indexOf(getApplication<App>().resources.getString(type.resourceId))?.let {
+            typeField.postValue(it + 1)
+        }
     }
 
     override fun onCleared() {
@@ -255,7 +258,7 @@ class NatalDateViewModel : BaseViewModel {
         val date = transformClientDateToServer("${birthDateField.get()} ${birthTimeField.get()}") ?: ""
         val birthLocation = birthLocationField.get().toString()
         val name = nameField.get().toString()
-        val type: String = NatalType.findBy(typeField.get().toString(), getApplication<App>().applicationContext)?.value ?: ""
+        val type: String = NatalType.values()[typeField.value!!].value
 
         val createUpdateNatalDate = if (id == null) {
             natalDateService.createNatalDateMutation(date, birthLocation, name, true, type)
