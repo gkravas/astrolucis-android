@@ -1,6 +1,7 @@
 package com.astrolucis.services.interfaces
 
 import com.astrolucis.fragment.UserFragment
+import com.astrolucis.services.Preferences
 
 interface Preferences {
     companion object {
@@ -9,5 +10,7 @@ interface Preferences {
 
     var me: UserFragment?
     var token: String
+    var dailyNotifications: Boolean
+    var personalNotifications: Boolean
     fun reset()
 }

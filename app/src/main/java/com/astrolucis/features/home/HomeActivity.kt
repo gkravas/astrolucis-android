@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.databinding.OnRebindCallback
 import android.databinding.ViewDataBinding
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.GravityCompat
@@ -24,8 +23,6 @@ import com.astrolucis.features.natalDate.NatalDateFragment
 import com.astrolucis.features.profile.ProfileFragment
 import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
 
@@ -34,7 +31,6 @@ class HomeActivity: BaseActivity() {
 
 
     companion object {
-        const val LATEST_VERSION = "latest_version_android"
         const val OPEN_NATAL_DATE = "OPEN_NATAL_DATE"
         const val BLOG_URL = "https://www.gineastrologos.gr"
         const val GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}&referrer=utm_source%3DandroidApp"
@@ -100,7 +96,7 @@ class HomeActivity: BaseActivity() {
             }
         })
 
-        binding.navigation.setNavigationItemSelectedListener({
+        binding.navigation.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.logout_menu_item -> viewModel.logout()
                 R.id.profile_menu_item -> viewModel.goToProfile()
@@ -120,35 +116,10 @@ class HomeActivity: BaseActivity() {
             }
             binding.drawerLayout.closeDrawers()
             true
-        })
-
-        initFirebaseRemoteConfig()
-    }
-
-    private fun initFirebaseRemoteConfig() {
-        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
-
-        val configSettings = FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build()
-
-        firebaseRemoteConfig.setConfigSettings(configSettings)
-        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults)
-        var cacheExpiration: Long = 3600 // 1 hour in seconds.
-        // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
-        // retrieve values from the service.
-        if (firebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0
         }
 
-
-        firebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        firebaseRemoteConfig.activateFetched()
-                    }
-                    viewModel.showUpgradeDialog(firebaseRemoteConfig.getLong(LATEST_VERSION))
-                }
+        viewModel.initFirebaseRemoteConfig()
+        viewModel.initFirebaseMessaging()
     }
 
     override fun parseState(state: Bundle) {

@@ -4,29 +4,38 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.Observable
 import android.databinding.ObservableField
-import android.text.TextUtils
 import com.astrolucis.R
 import com.astrolucis.core.BaseViewModel
 import com.astrolucis.di.App
+import com.astrolucis.features.home.HomeViewModel
 import com.astrolucis.services.interfaces.NatalDateService
+import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.astrolucis.utils.ErrorHandler
 import com.astrolucis.utils.ErrorPresentation
-import com.astrolucis.utils.JWTUtils
 import com.astrolucis.utils.dialogs.AlertDialog.Companion.LOGOUT_DIALOG_ID
 import com.astrolucis.utils.validators.EmailValidator
 import com.astrolucis.utils.validators.EmptyValidator
 import com.astrolucis.utils.validators.EqualFieldsValidator
 import com.astrolucis.utils.validators.RangeValidator
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class ProfileViewModel: BaseViewModel {
 
     companion object {
         const val PASSWORD_MIN_LENGTH: Int = 6
         const val PASSWORD_MAX_LENGTH: Int = 20
+
+        const val DAILY: String = "daily"
+        const val DAILY_EL: String = "daily_el"
+        const val DAILY_EN: String = "daily_en"
+        const val GREEK_LANGUAGE: String = "el"
+        const val OS: String = "android"
     }
 
     enum class Action {
@@ -42,19 +51,23 @@ class ProfileViewModel: BaseViewModel {
     val passwordRepeatError: ObservableField<CharSequence> = ObservableField("")
 
     private val userService: UserService
+    private val preferences: Preferences
     private val natalDateService: NatalDateService
 
     private val disposables = CompositeDisposable()
 
     val loadingEmail: MutableLiveData<Boolean> = MutableLiveData()
     val loadingPassword: MutableLiveData<Boolean> = MutableLiveData()
+    val dailyNotifications: MutableLiveData<Boolean> = MutableLiveData()
+    val personalNotifications: MutableLiveData<Boolean> = MutableLiveData()
     val messagesLiveData: MutableLiveData<ErrorPresentation> = MutableLiveData()
     val actionsLiveData: MutableLiveData<Action> = MutableLiveData()
 
-    constructor(application: Application, userService: UserService,
+    constructor(application: Application, userService: UserService, preferences: Preferences,
                 natalDateService: NatalDateService) : super(application) {
 
         this.userService = userService
+        this.preferences = preferences
         this.natalDateService = natalDateService
 
         this.emailField.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
@@ -77,11 +90,65 @@ class ProfileViewModel: BaseViewModel {
 
         loadingEmail.value = false
         loadingPassword.value = false
+        dailyNotifications.value = preferences.dailyNotifications
+        personalNotifications.value = preferences.personalNotifications
     }
 
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+    }
+
+    fun registerDailyNotifications() {
+        preferences.dailyNotifications = true
+        val language = Locale.getDefault().language
+        FirebaseMessaging.getInstance().subscribeToTopic(DAILY)
+        if (language == GREEK_LANGUAGE) {
+            FirebaseMessaging.getInstance().subscribeToTopic(DAILY_EL)
+        } else {
+            FirebaseMessaging.getInstance().subscribeToTopic(DAILY_EN)
+        }
+    }
+
+    fun unregisterDailyNotifications() {
+        preferences.dailyNotifications = false
+        val language = Locale.getDefault().language
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(DAILY)
+        if (language == GREEK_LANGUAGE) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(DAILY_EL)
+        } else {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(DAILY_EN)
+        }
+    }
+
+    fun registerPersonalNotifications() {
+        preferences.personalNotifications = true
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            val language = Locale.getDefault().language
+            registerToken(it.token, language)
+        }
+    }
+
+    fun unregisterPersonalNotifications() {
+        preferences.personalNotifications = false
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            val language = Locale.getDefault().language
+            unregisterToken(it.token, language)
+        }
+    }
+
+    private fun registerToken(token: String, language: String) {
+        disposables.add(userService.registerFirebaseToken(token, language, HomeViewModel.OS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { })
+    }
+
+    private fun unregisterToken(token: String, language: String) {
+        disposables.add(userService.unregisterFirebaseToken(token, language, HomeViewModel.OS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { })
     }
 
     private fun validateEmail(): Boolean {
@@ -154,10 +221,10 @@ class ProfileViewModel: BaseViewModel {
         disposables.add(natalDateService.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({
+                .doOnSubscribe {
                     loadingEmail.value = true
                     loadingPassword.value = true
-                })
+                }
                 .subscribe(
                         { me ->
                             emailField.set(me.email())

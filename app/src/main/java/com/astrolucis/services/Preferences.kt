@@ -12,8 +12,9 @@ class Preferences: Preferences {
 
     private enum class KEYS constructor(private val text: String) {
         TOKEN("TOKEN"),
-        ME("ME");
-
+        ME("ME"),
+        DAILY_NOTIFICATION("DAILY_NOTIFICATION"),
+        PERSONAL_NOTIFICATION("PERSONAL_NOTIFICATION");
         override fun toString(): String {
             return text
         }
@@ -41,6 +42,22 @@ class Preferences: Preferences {
             saveString(KEYS.TOKEN.toString(), value)
         }
 
+    override var dailyNotifications: Boolean
+        get() {
+            return store.getBoolean(KEYS.DAILY_NOTIFICATION.toString(), true)
+        }
+        set(value) {
+            saveBoolean(KEYS.DAILY_NOTIFICATION.toString(), value)
+        }
+
+    override var personalNotifications: Boolean
+        get() {
+            return store.getBoolean(KEYS.PERSONAL_NOTIFICATION.toString(), true)
+        }
+        set(value) {
+            saveBoolean(KEYS.PERSONAL_NOTIFICATION.toString(), value)
+        }
+
     constructor(app: App) {
         SecuredPreferenceStore.init(app, DefaultRecoveryHandler())
         store = SecuredPreferenceStore.getSharedInstance()
@@ -49,6 +66,12 @@ class Preferences: Preferences {
     private fun saveString(name: String, value: String) {
         store.edit()
                 .putString(name, value)
+                .apply()
+    }
+
+    private fun saveBoolean(name: String, value: Boolean) {
+        store.edit()
+                .putBoolean(name, value)
                 .apply()
     }
 

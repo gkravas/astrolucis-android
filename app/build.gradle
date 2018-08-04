@@ -11,8 +11,8 @@ android {
         applicationId "com.astrolucis"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -153,7 +153,7 @@ dependencies {
     String firebaseVersion = '16.0.0'
     implementation "com.google.firebase:firebase-core:$firebaseVersion"
     implementation "com.google.firebase:firebase-ads:15.0.1"
-    implementation "com.google.firebase:firebase-messaging:17.0.0"
+    implementation "com.google.firebase:firebase-messaging:17.1.0"
     implementation "com.google.firebase:firebase-config:$firebaseVersion"
 
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'

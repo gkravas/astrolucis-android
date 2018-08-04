@@ -18,4 +18,6 @@ interface UserService {
     fun changeEmail(email: String): Observable<String>
     fun updateLivingLocation(livingLocation: String): Observable<UserFragment?>
     fun logout()
+    fun registerFirebaseToken(token: String, language: String, os: String): Observable<String>
+    fun unregisterFirebaseToken(token: String, language: String, os: String): Observable<String>
 }

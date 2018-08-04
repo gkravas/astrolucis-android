@@ -4,12 +4,12 @@ import android.app.Application
 import com.astrolucis.BuildConfig
 import com.astrolucis.features.dailyPrediction.DailyPredictionViewModel
 import com.astrolucis.features.dailyPredictionList.DailyPredictionListViewModel
-import com.astrolucis.services.*
 import com.astrolucis.features.home.HomeViewModel
 import com.astrolucis.features.login.LoginViewModel
 import com.astrolucis.features.natalDate.NatalDateViewModel
 import com.astrolucis.features.profile.ProfileViewModel
 import com.astrolucis.features.resetPassword.ResetPasswordViewModel
+import com.astrolucis.services.*
 import com.astrolucis.utils.routing.AppRouter
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
@@ -18,6 +18,7 @@ import org.koin.android.ext.android.startKoin
 import org.koin.dsl.module.Module
 import java.net.CookieManager
 import java.net.CookiePolicy
+
 
 class App : Application() {
 
@@ -40,7 +41,7 @@ class App : Application() {
         viewModel { HomeViewModel(get(), get(), get()) }
         viewModel { NatalDateViewModel(get(), get(), get(), get()) }
         viewModel { ResetPasswordViewModel(get(), get(), get(), get()) }
-        viewModel { ProfileViewModel(get(), get(), get()) }
+        viewModel { ProfileViewModel(get(), get(), get(), get()) }
         viewModel { DailyPredictionListViewModel(get(), get()) }
         viewModel { DailyPredictionViewModel(get(), get()) }
     }

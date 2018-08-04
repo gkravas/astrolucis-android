@@ -58,6 +58,29 @@ class ProfileFragment: BaseFragment() {
                 binding.saveButtonPassword.isEnabled = !it
             }
         })
+
+        viewModel.dailyNotifications.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                binding.switchDailyNotifications.isChecked = it
+                if (it) {
+                    viewModel.registerDailyNotifications()
+                } else {
+                    viewModel.unregisterDailyNotifications()
+                }
+            }
+        })
+
+        viewModel.personalNotifications.observe(this, android.arch.lifecycle.Observer {
+            it?.let {
+                binding.switchPersonalNotifications.isChecked = it
+                if (it) {
+                    viewModel.registerPersonalNotifications()
+                } else {
+                    viewModel.unregisterPersonalNotifications()
+                }
+            }
+        })
+
         viewModel.initForm()
     }
 

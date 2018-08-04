@@ -42,6 +42,48 @@
                             android:layout_height="wrap_content"
                             style="@style/Base.TextAppearance.AppCompat.Title"
                             android:gravity="center"
+                            android:text="@string/profile.notificationsTitle.text"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_daily_notifications"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_medium"
+                            android:checked="@={viewModel.dailyNotifications}"
+                            android:text="@string/profile.dailyNotificationsSwitch.text"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_personal_notifications"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_medium"
+                            android:layout_marginBottom="@dimen/padding_medium"
+                            android:checked="@={viewModel.personalNotifications}"
+                            android:text="@string/profile.personalNotificationsSwitch.text"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:layout_gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_small">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.TextAppearance.AppCompat.Title"
+                            android:gravity="center"
                             android:text="@string/profile.changeEmailTitle.text"/>
 
                         <android.support.design.widget.TextInputLayout

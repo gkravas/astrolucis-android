@@ -168,7 +168,7 @@ class LoginViewModel: BaseViewModel {
         disposables.add(userService.fbLogin(fbToken!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.value = true })
+                .doOnSubscribe { loading.value = true }
                 .subscribe(
                         { response -> handleLoginSuccess(response) },
                         { handleError(it) }

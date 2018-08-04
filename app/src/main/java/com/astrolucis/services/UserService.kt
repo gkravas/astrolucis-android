@@ -13,6 +13,15 @@ import io.reactivex.Observable
 class UserService(private val restService: RestService,
                   private val graphQLService: GraphQLService,
                   private val preferences: Preferences): com.astrolucis.services.interfaces.UserService {
+
+    override fun registerFirebaseToken(token: String, language: String, os: String): Observable<String> {
+        return restService.authenticationAPI.registerFirebaseToken(token, language, os)
+    }
+
+    override fun unregisterFirebaseToken(token: String, language: String, os: String): Observable<String> {
+        return restService.authenticationAPI.unregisterFirebaseToken(token, language, os)
+    }
+
     override fun changeEmail(email: String): Observable<String> {
         return restService.authenticationAPI.changeEmail(email)
     }

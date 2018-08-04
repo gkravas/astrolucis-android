@@ -34,4 +34,16 @@ interface UserAPI {
     @FormUrlEncoded
     @POST("/api/v1/auth/changeEmail")
     fun changeEmail(@Field("email") email: String): Observable<String>
+
+    @FormUrlEncoded
+    @POST("/api/v1/notification/token/add")
+    fun registerFirebaseToken(@Field("token") email: String,
+                              @Field("language") language: String,
+                              @Field("os") os: String): Observable<String>
+
+    @FormUrlEncoded
+    @POST("/api/v1/notification/token/remove")
+    fun unregisterFirebaseToken(@Field("token") email: String,
+                                @Field("language") language: String,
+                                @Field("os") os: String): Observable<String>
 }
