@@ -1,11 +1,17 @@
 package com.astrolucis.core
 
+import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import com.astrolucis.utils.dialogs.AlertDialog
 
 open class BaseFragment: Fragment() {
     val baseActivity: BaseActivity get() = activity as BaseActivity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
+    }
 
     fun setActionBarTitle(@StringRes titleStringRes: Int) {
         baseActivity.supportActionBar?.let {
@@ -18,13 +24,13 @@ open class BaseFragment: Fragment() {
     }
 
     fun showAlertDialog(baseFragment: BaseFragment, id: String, data: AlertDialog.Data<*>, title: CharSequence, message: CharSequence) {
-        activity?.runOnUiThread({
+        activity?.runOnUiThread {
             AlertDialog.newInstance(id, data, title, message,
                     resources.getString(android.R.string.ok),
                     resources.getString(android.R.string.cancel)).apply {
                         this.setTargetFragment(baseFragment, 0)
                     }
                     .show(fragmentManager, id)
-        })
+        }
     }
 }

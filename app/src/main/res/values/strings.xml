@@ -56,6 +56,9 @@
     <string name="natalDate.defaultCountry">Ελλάδα</string>
     <string name="natalDate.natalDateSaveComplete.text">Ο Γεννέθλιος σου χάρτη δημιουργήθηκε με επιτυχεία!</string>
 
+    <!-- NATAL DATES -->
+    <string name="natalChart.menu.edit">Τροποποίησε τον γενέθλιο χάρτη σου</string>
+
     <!-- RESET PASSWORD -->
     <string name="resetPassword.changePasswordButton.text">Αλλαγή Κωδικού</string>
 
@@ -102,4 +105,7 @@
     <string name="error.invalidBirthDate">Η ημερομηνία ή ώρα γεννησης έχει λάθος μορφή</string>
     <string name="error.resetPassword.tokenExpired">Δυστυχώς περάσανε τα 30 λεπτά που είχες για να αλλάξεις τον κωδικό σου.\nΠήγαινε ξανά στο ξέχασα τον κωδικό μου.</string>
     <string name="error.general">Υπήρξε κάποιο πρόβλημα επικοινωνίας με τον ψηφιακό αστρολόγο… Δοκίμασε πάλι σε λιγάκι!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

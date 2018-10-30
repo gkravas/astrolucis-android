@@ -53,6 +53,7 @@ class DailyPredictionListFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentDailyPredictionsBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel

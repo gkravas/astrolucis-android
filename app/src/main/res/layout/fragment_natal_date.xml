@@ -11,7 +11,9 @@
     <android.support.design.widget.CoordinatorLayout
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context="com.astrolucis.features.natalDate.NatalDateFragment">
+              tools:context="com.astrolucis.features.natalDate.NatalDateFragment"
+              android:background="@android:color/background_light"
+              android:paddingTop="@dimen/padding_small">
 
         <ScrollView
             android:layout_width="match_parent"

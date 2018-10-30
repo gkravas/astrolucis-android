@@ -11,7 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import com.astrolucis.utils.dialogs.AlertDialog
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedListener {
 
     companion object {
         private const val BACK_STACK = "backStack"
@@ -19,6 +19,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.addOnBackStackChangedListener(this)
         (savedInstanceState ?: this.intent.extras)?.let {
             parseState(it)
         }
@@ -39,27 +40,23 @@ open class BaseActivity : AppCompatActivity() {
                 supportFragmentManager.popBackStackImmediate()
             }
         }
-        val tag = System.currentTimeMillis().toString()
         supportFragmentManager
                 .beginTransaction()
                 .addToBackStack(BACK_STACK)
-                .add(getMasterContainerId(), fragment, tag)
-                .addToBackStack(tag)
+                .add(getMasterContainerId(), fragment)
                 .commit()
     }
 
     fun pushFragment(fragment: BaseFragment) {
-        val tag = System.currentTimeMillis().toString()
         supportFragmentManager
                 .beginTransaction()
                 .addToBackStack(BACK_STACK)
-                .replace(getMasterContainerId(), fragment, tag)
-                .addToBackStack(tag)
+                .replace(getMasterContainerId(), fragment)
                 .commit()
     }
 
     fun popFragment() {
-        supportFragmentManager.popBackStackImmediate()
+        supportFragmentManager.popBackStack()
     }
 
     fun isBackStackEmpty(): Boolean {
@@ -86,18 +83,18 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showAlertDialog(id: String, data: AlertDialog.Data<*>, title: CharSequence, message: CharSequence) {
-        runOnUiThread({
+        runOnUiThread {
             AlertDialog.newInstance(id, data, title, message,
                     resources.getString(android.R.string.ok),
                     resources.getString(android.R.string.cancel))
                     .show(supportFragmentManager, id)
-        })
+        }
     }
 
     fun showSnackBar(view: View, @StringRes title: Int) {
-        runOnUiThread({
+        runOnUiThread {
             Snackbar.make(view, title, Snackbar.LENGTH_LONG).show()
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -113,5 +110,9 @@ open class BaseActivity : AppCompatActivity() {
     fun openURL(url: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
+    }
+
+    override fun onBackStackChanged() {
+
     }
 }

@@ -124,7 +124,7 @@ class NatalDateViewModel : BaseViewModel {
         disposables.add(natalDateService.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ loading.value = true })
+                .doOnSubscribe { loading.value = true }
                 .subscribe(
                         { me ->
                             showNatalDate(me?.location(),

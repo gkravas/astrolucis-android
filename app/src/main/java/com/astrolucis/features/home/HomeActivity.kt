@@ -19,10 +19,13 @@ import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.ActivityHomeBinding
 import com.astrolucis.features.dailyPredictionList.DailyPredictionListFragment
 import com.astrolucis.features.login.LoginActivity
+import com.astrolucis.features.natalChart.NatalChartFragment
 import com.astrolucis.features.natalDate.NatalDateFragment
 import com.astrolucis.features.profile.ProfileFragment
 import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
+import kotlinx.android.synthetic.main.activity_daily_prediction.*
+import kotlinx.android.synthetic.main.toolbar.view.*
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
 
@@ -69,16 +72,20 @@ class HomeActivity: BaseActivity() {
         viewModel.viewState.observe(this, Observer {
             when (it) {
                 HomeViewModel.ViewState.PROFILE -> {
-                    pushFragment(ProfileFragment())
-                    binding.navigation.post({ binding.navigation.setCheckedItem(R.id.profile_menu_item) })
+                    startWithFragment(ProfileFragment())
+                    binding.navigation.post { binding.navigation.setCheckedItem(R.id.profile_menu_item) }
                 }
                 HomeViewModel.ViewState.NATAL_DATE -> {
-                    pushFragment(NatalDateFragment())
-                    binding.navigation.post({ binding.navigation.setCheckedItem(R.id.natal_date_menu_item) })
+                    startWithFragment(NatalDateFragment())
+                    binding.navigation.post { binding.navigation.setCheckedItem(R.id.natal_date_menu_item) }
+                }
+                HomeViewModel.ViewState.NATAL_CHART-> {
+                    startWithFragment(NatalChartFragment())
+                    binding.navigation.post { binding.navigation.setCheckedItem(R.id.natal_date_menu_item) }
                 }
                 HomeViewModel.ViewState.DAILY_PREDICTION_LIST -> {
-                    pushFragment(DailyPredictionListFragment())
-                    binding.navigation.post({ binding.navigation.setCheckedItem(R.id.daily_prediction_menu_item) })
+                    startWithFragment(DailyPredictionListFragment())
+                    binding.navigation.post { binding.navigation.setCheckedItem(R.id.daily_prediction_menu_item) }
                 }
                 HomeViewModel.ViewState.LOGOUT -> {
                     appRouter.goTo(LoginActivity::class, this)
@@ -136,7 +143,9 @@ class HomeActivity: BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (!isAtRootFragment()) {
+            popFragment()
+        } else if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             if (doubleBackToExitPressedOnce) {
@@ -157,5 +166,14 @@ class HomeActivity: BaseActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
+    }
+
+    override fun onBackStackChanged() {
+        super.onBackStackChanged()
+        if (!isAtRootFragment()) {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        } else {
+            drawerToggle.syncState()
+        }
     }
 }

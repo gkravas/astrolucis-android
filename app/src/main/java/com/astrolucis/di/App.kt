@@ -6,6 +6,7 @@ import com.astrolucis.features.dailyPrediction.DailyPredictionViewModel
 import com.astrolucis.features.dailyPredictionList.DailyPredictionListViewModel
 import com.astrolucis.features.home.HomeViewModel
 import com.astrolucis.features.login.LoginViewModel
+import com.astrolucis.features.natalChart.NatalChartViewModel
 import com.astrolucis.features.natalDate.NatalDateViewModel
 import com.astrolucis.features.profile.ProfileViewModel
 import com.astrolucis.features.resetPassword.ResetPasswordViewModel
@@ -44,6 +45,7 @@ class App : Application() {
         viewModel { ProfileViewModel(get(), get(), get(), get()) }
         viewModel { DailyPredictionListViewModel(get(), get()) }
         viewModel { DailyPredictionViewModel(get(), get()) }
+        viewModel { NatalChartViewModel(get(), get(), get(), get()) }
     }
 
     companion object {

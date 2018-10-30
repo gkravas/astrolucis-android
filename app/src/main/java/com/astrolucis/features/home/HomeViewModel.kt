@@ -36,6 +36,7 @@ class HomeViewModel: BaseViewModel {
         STAY_THERE,
         PROFILE,
         NATAL_DATE,
+        NATAL_CHART,
         DAILY_PREDICTION_LIST,
         SHOW_UPDATE_DIALOG,
         GO_TO_GOOGLE_PLAY,
@@ -77,7 +78,7 @@ class HomeViewModel: BaseViewModel {
     }
 
     fun goToNatalDate() {
-        viewState.value = getGoTo(ViewState.NATAL_DATE)
+        viewState.value = preferences.me?.natalDates()?.let { getGoTo(ViewState.NATAL_CHART) } ?: getGoTo(ViewState.NATAL_DATE)
     }
 
     fun goToDailyPrediction() {
