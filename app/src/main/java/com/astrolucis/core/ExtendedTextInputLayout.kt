@@ -2,16 +2,17 @@ package com.astrolucis.core
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.support.design.widget.TextInputLayout
-import android.support.v4.view.animation.FastOutSlowInInterpolator
-import android.support.v4.widget.TextViewCompat
+
+import androidx.core.widget.TextViewCompat
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.widget.EditText
 import android.widget.TextView
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.astrolucis.R
+import com.google.android.material.textfield.TextInputLayout
 
 open class ExtendedTextInputLayout : TextInputLayout {
 
@@ -32,16 +33,29 @@ open class ExtendedTextInputLayout : TextInputLayout {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    var helperText: CharSequence
-        get() = _helperText
-        set(value) {
-            if (_helperText == value) {
-                return
-            }
-            _helperText = value
-            _helperTextEnabled = value.isNotBlank()
-            setHelperTextOnHelperView(value)
+    override fun getHelperText(): CharSequence? {
+        return _helperText
+    }
+
+    override fun setHelperText(value: CharSequence?) {
+        if (_helperText == value) {
+            return
         }
+        _helperText = value!!
+        _helperTextEnabled = value.isNotBlank()
+        setHelperTextOnHelperView(value)
+    }
+
+//    var helperText: CharSequence?
+//        get() = _helperText
+//        set(value) {
+//            if (_helperText == value) {
+//                return
+//            }
+//            _helperText = value!!
+//            _helperTextEnabled = value.isNotBlank()
+//            setHelperTextOnHelperView(value)
+//        }
 
     var helperTextAppearance: Int
         get() = _helperTextAppearance
@@ -50,20 +64,35 @@ open class ExtendedTextInputLayout : TextInputLayout {
             TextViewCompat.setTextAppearance(_helperTextView, value)
         }
 
-    var helperTextColor: ColorStateList?
-        get() = _helperTextColor
-        set(value) {
-            _helperTextColor = value
-            _helperTextView.setTextColor(value)
-        }
+    override fun setHelperTextColor(value: ColorStateList?) {
+        _helperTextColor = value
+        _helperTextView.setTextColor(value)
+    }
 
-    var helperTextEnabled: Boolean
-        get() = _helperTextEnabled
-        set(value) {
-            if (_helperTextEnabled == value) return
-            _helperTextEnabled = value
-            switchHelperText()
-        }
+//    var helperTextColor: ColorStateList?
+//        get() = _helperTextColor
+//        set(value) {
+//            _helperTextColor = value
+//            _helperTextView.setTextColor(value)
+//        }
+
+    override fun isHelperTextEnabled(): Boolean {
+        return _helperTextEnabled
+    }
+
+    override fun setHelperTextEnabled(value: Boolean) {
+        if (_helperTextEnabled == value) return
+        _helperTextEnabled = value
+        switchHelperText()
+    }
+
+//    var helperTextEnabled: Boolean
+//        get() = _helperTextEnabled
+//        set(value) {
+//            if (_helperTextEnabled == value) return
+//            _helperTextEnabled = value
+//            switchHelperText()
+//        }
 
     override fun addView(child: View?, params: ViewGroup.LayoutParams?) {
         super.addView(child, params)
@@ -76,7 +105,7 @@ open class ExtendedTextInputLayout : TextInputLayout {
         if (_errorTextEnabled == enabled) return
         _errorTextEnabled = enabled
 
-        if (_errorTextEnabled && helperTextEnabled) {
+        if (_errorTextEnabled && isHelperTextEnabled) {
             switchHelperText()
         }
 
@@ -115,7 +144,7 @@ open class ExtendedTextInputLayout : TextInputLayout {
         if (_errorTextEnabled || !_helperTextEnabled) { // hide helper text
             setHelperTextOnHelperView(null)
         } else if (!_errorTextEnabled && _helperTextEnabled) { // if there is a helper text, show it
-            if (helperText.isNotBlank()) {
+            if (helperText!!.isNotBlank()) {
                 setHelperTextOnHelperView(helperText)
             } else {
                 setHelperTextOnHelperView(null)

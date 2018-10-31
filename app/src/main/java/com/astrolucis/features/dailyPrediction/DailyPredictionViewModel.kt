@@ -1,8 +1,8 @@
 package com.astrolucis.features.dailyPrediction
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
-import android.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
+import androidx.databinding.ObservableField
 import com.astrolucis.GetDailyPredictionQuery
 import com.astrolucis.R
 import com.astrolucis.core.BaseViewModel

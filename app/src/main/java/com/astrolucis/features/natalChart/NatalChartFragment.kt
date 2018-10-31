@@ -1,20 +1,18 @@
 package com.astrolucis.features.natalChart
 
-import android.arch.lifecycle.Observer
-import android.content.Context
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+
 import android.transition.TransitionManager
 import android.view.*
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentNatalChartBinding
-import com.astrolucis.features.home.HomeActivity
 import com.astrolucis.features.natalDate.NatalDateFragment
-import com.astrolucis.utils.routing.AppRouter
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
 

@@ -1,12 +1,10 @@
 package com.astrolucis.features.dailyPrediction
 
-import android.arch.lifecycle.Observer
-import android.databinding.DataBindingUtil
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
 import android.transition.TransitionManager
 import android.view.Menu
 import android.view.ViewGroup
@@ -17,8 +15,9 @@ import com.astrolucis.utils.dialogs.AlertDialog
 import org.koin.android.architecture.ext.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
-import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.astrolucis.GetDailyPredictionQuery
 import com.astrolucis.utils.ErrorPresentation
 import com.google.android.gms.ads.AdRequest

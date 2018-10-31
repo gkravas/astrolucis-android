@@ -1,10 +1,10 @@
 package com.astrolucis.utils.dialogs
 
 import android.app.Dialog
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatDialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.astrolucis.core.BaseViewModel
 import org.koin.android.architecture.ext.KoinFactory
 import java.io.Serializable
@@ -62,7 +62,7 @@ class AlertDialog: AppCompatDialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = android.support.v7.app.AlertDialog.Builder(activity!!)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(activity!!)
         arguments?.let {
             val id = it[ID] as String
 

@@ -1,8 +1,8 @@
 package com.astrolucis.features.natalChart
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.astrolucis.databinding.CardPredictionBinding
 import com.astrolucis.databinding.RowNatalChartHeaderBinding
 import com.astrolucis.databinding.RowNatalChartRowBinding
@@ -95,6 +95,6 @@ class NatalChartAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class HeaderViewHolder(val binding: RowNatalChartHeaderBinding?) : RecyclerView.ViewHolder(binding?.root)
-    class RowViewHolder(val binding: RowNatalChartRowBinding?) : RecyclerView.ViewHolder(binding?.root)
+    class HeaderViewHolder(val binding: RowNatalChartHeaderBinding?) : RecyclerView.ViewHolder(binding?.root!!)
+    class RowViewHolder(val binding: RowNatalChartRowBinding?) : RecyclerView.ViewHolder(binding?.root!!)
 }

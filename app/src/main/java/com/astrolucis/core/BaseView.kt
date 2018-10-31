@@ -1,6 +1,6 @@
 package com.astrolucis.core
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 interface BaseView {
     fun showLoadingIndicator()

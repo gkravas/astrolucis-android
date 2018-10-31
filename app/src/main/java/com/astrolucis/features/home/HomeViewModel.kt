@@ -1,11 +1,10 @@
 package com.astrolucis.features.home
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.astrolucis.BuildConfig
 import com.astrolucis.R
 import com.astrolucis.core.BaseViewModel
-import com.astrolucis.di.App
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
 import com.google.android.gms.tasks.OnSuccessListener

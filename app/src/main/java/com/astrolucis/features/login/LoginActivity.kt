@@ -1,10 +1,10 @@
 package com.astrolucis.features.login
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
-import android.databinding.DataBindingUtil
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View.GONE
@@ -104,7 +104,7 @@ class LoginActivity : BaseActivity() {
         viewModel.fbLogin(AccessToken.getCurrentAccessToken()?.token)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }

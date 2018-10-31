@@ -1,16 +1,15 @@
 package com.astrolucis.features.natalDate
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
-import android.databinding.Observable
-import android.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
+import androidx.databinding.Observable
+import androidx.databinding.ObservableField
 import android.view.View
 import com.astrolucis.R
 import com.astrolucis.core.BaseViewModel
 import com.astrolucis.di.App
 import com.astrolucis.fragment.NatalDateFragment
 import com.astrolucis.models.NatalType
-import com.astrolucis.models.natalDate.Chart
 import com.astrolucis.services.interfaces.NatalDateService
 import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
@@ -18,12 +17,9 @@ import com.astrolucis.utils.ErrorHandler
 import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.dialogs.AlertDialog.Companion.LOGOUT_DIALOG_ID
 import com.astrolucis.utils.validators.EmptyValidator
-import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.json.JSONObject
-import java.lang.reflect.Type
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

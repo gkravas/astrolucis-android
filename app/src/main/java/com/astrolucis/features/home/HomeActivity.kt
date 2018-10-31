@@ -1,15 +1,15 @@
 package com.astrolucis.features.home
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Intent
 import android.content.res.Configuration
-import android.databinding.DataBindingUtil
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.ActionBarDrawerToggle
 import android.transition.TransitionManager
 import android.view.ViewGroup
 import android.widget.Toast
@@ -24,8 +24,6 @@ import com.astrolucis.features.natalDate.NatalDateFragment
 import com.astrolucis.features.profile.ProfileFragment
 import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
-import kotlinx.android.synthetic.main.activity_daily_prediction.*
-import kotlinx.android.synthetic.main.toolbar.view.*
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.android.inject
 

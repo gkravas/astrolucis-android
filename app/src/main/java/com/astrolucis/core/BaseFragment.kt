@@ -1,8 +1,9 @@
 package com.astrolucis.core
 
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
+
 import com.astrolucis.utils.dialogs.AlertDialog
 
 open class BaseFragment: Fragment() {

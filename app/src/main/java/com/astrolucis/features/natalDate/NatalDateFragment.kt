@@ -1,21 +1,18 @@
 package com.astrolucis.features.natalDate
 
 import android.content.Context
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
 import android.text.TextUtils
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentNatalDateBinding
 import com.astrolucis.features.home.HomeActivity
-import com.astrolucis.models.NatalType
 import com.astrolucis.utils.dialogs.AlertDialog
 import com.astrolucis.utils.routing.AppRouter
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -45,7 +42,7 @@ class NatalDateFragment : BaseFragment() {
 
         setActionBarTitle(R.string.drawer_menu_natalDate)
 
-        viewModel.actionsLiveData.observe(this, android.arch.lifecycle.Observer {
+        viewModel.actionsLiveData.observe(this, androidx.lifecycle.Observer {
             when (it) {
                 NatalDateViewModel.Action.OPEN_DATE_PICKER -> openDatePicker()
                 NatalDateViewModel.Action.OPEN_TIME_PICKER -> openTimePicker()
@@ -54,26 +51,26 @@ class NatalDateFragment : BaseFragment() {
                 NatalDateViewModel.Action.GO_TO_HOME -> appRouter.goTo(HomeActivity::class, baseActivity)
             }
         })
-        viewModel.messagesLiveData.observe(this, android.arch.lifecycle.Observer {
+        viewModel.messagesLiveData.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 showAlertDialog(this@NatalDateFragment, it.dialogId, AlertDialog.Data(viewModel::class), it.titleResId, it.messageResId)
             }
         })
 
-        viewModel.loading.observe(this, android.arch.lifecycle.Observer {
+        viewModel.loading.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 binding.progressBar.visibility = if (it)  View.VISIBLE else View.GONE
                 binding.saveButton.isEnabled = !it
             }
         })
 
-        viewModel.typeField.observe(this, android.arch.lifecycle.Observer {
+        viewModel.typeField.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 binding.typeAutoComplete.setSelection(it)
             }
         })
 
-        viewModel.types.observe(this, android.arch.lifecycle.Observer {
+        viewModel.types.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, it)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

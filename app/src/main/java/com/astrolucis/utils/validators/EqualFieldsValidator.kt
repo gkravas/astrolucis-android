@@ -1,6 +1,6 @@
 package com.astrolucis.utils.validators
 
-import android.databinding.ObservableField
+import androidx.databinding.ObservableField
 
 class EqualFieldsValidator : ObservableValidator {
 

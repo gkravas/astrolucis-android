@@ -1,7 +1,6 @@
 package com.astrolucis.utils.validators
 
-import android.databinding.ObservableField
-import android.util.Patterns
+import androidx.databinding.ObservableField
 
 class EmptyValidator(inputBindable: ObservableField<CharSequence>,
                      errorTextBindable: ObservableField<CharSequence>,

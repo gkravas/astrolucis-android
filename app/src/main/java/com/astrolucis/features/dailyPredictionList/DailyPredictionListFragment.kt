@@ -2,15 +2,15 @@ package com.astrolucis.features.dailyPredictionList
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
-import android.support.transition.TransitionManager
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import androidx.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.astrolucis.R
 import com.astrolucis.core.BaseFragment
 import com.astrolucis.databinding.FragmentDailyPredictionsBinding
@@ -30,12 +30,12 @@ class DailyPredictionListFragment : BaseFragment() {
         super.onAttach(context)
         setActionBarTitle(R.string.drawer_menu_dailyPredictions)
 
-        viewModel.listLiveData.observe(this, android.arch.lifecycle.Observer {
+        viewModel.listLiveData.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 (binding.recyclerView.adapter as DailyPredictionListAdapter).items = it
             }
         })
-        viewModel.actionsLiveData.observe(this, android.arch.lifecycle.Observer {
+        viewModel.actionsLiveData.observe(this, androidx.lifecycle.Observer {
             when(it?.first) {
                 DailyPredictionListViewModel.Action.GO_TO_DAILY_PREDICTION -> {
                     Intent(context, DailyPredictionActivity::class.java).apply {

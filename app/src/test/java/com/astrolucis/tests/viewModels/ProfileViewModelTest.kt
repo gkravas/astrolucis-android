@@ -2,14 +2,10 @@ package com.astrolucis.tests.viewModels
 
 import com.astrolucis.*
 import com.astrolucis.core.BaseTest
-import com.astrolucis.features.natalDate.NatalDateViewModel
 import com.astrolucis.features.profile.ProfileViewModel
-import com.astrolucis.features.resetPassword.ResetPasswordViewModel
 import com.astrolucis.fragment.UserFragment
 import com.astrolucis.services.interfaces.NatalDateService
-import com.astrolucis.services.interfaces.Preferences
 import com.astrolucis.services.interfaces.UserService
-import com.astrolucis.tests.utils.Constants.Companion.NON_EXPIRING_JWT
 import com.astrolucis.utils.ErrorFactory
 import com.astrolucis.utils.ErrorPresentation
 import com.astrolucis.utils.TrampolineSchedulerRule
@@ -178,7 +174,7 @@ class ProfileViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         profileViewModel.loadingPassword.addOnPropertyChangedCallback(listener)
 
         profileViewModel.changePassword()
@@ -204,7 +200,7 @@ class ProfileViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         profileViewModel.loadingPassword.addOnPropertyChangedCallback(listener)
 
         profileViewModel.changePassword()
@@ -225,7 +221,7 @@ class ProfileViewModelTest: BaseTest() {
         Assert.assertEquals(resources.getText(R.string.login_email_emptyError),
                 profileViewModel.emailError.get())
 
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         profileViewModel.loadingEmail.addOnPropertyChangedCallback(listener)
         profileViewModel.changeEmail()
         Mockito.verify(listener, Mockito.times(0)).onPropertyChanged(profileViewModel.loadingEmail, BR._all)
@@ -241,7 +237,7 @@ class ProfileViewModelTest: BaseTest() {
                 profileViewModel.emailError.get())
 
 
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         profileViewModel.loadingEmail.addOnPropertyChangedCallback(listener)
         profileViewModel.changeEmail()
         Mockito.verify(listener, Mockito.times(0)).onPropertyChanged(profileViewModel.loadingEmail, BR._all)
@@ -257,7 +253,7 @@ class ProfileViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         profileViewModel.loadingEmail.addOnPropertyChangedCallback(listener)
 
         profileViewModel.changeEmail()

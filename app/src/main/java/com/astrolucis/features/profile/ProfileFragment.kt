@@ -1,9 +1,9 @@
 package com.astrolucis.features.profile
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Context
-import android.databinding.OnRebindCallback
-import android.databinding.ViewDataBinding
+import androidx.databinding.OnRebindCallback
+import androidx.databinding.ViewDataBinding
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -42,7 +42,7 @@ class ProfileFragment: BaseFragment() {
             }
         })
 
-        viewModel.loadingEmail.observe(this, android.arch.lifecycle.Observer {
+        viewModel.loadingEmail.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 binding.emailTextView.isEnabled = !it
                 binding.progressBarEmail.visibility = if (it)  View.VISIBLE else View.GONE
@@ -50,7 +50,7 @@ class ProfileFragment: BaseFragment() {
             }
         })
 
-        viewModel.loadingPassword.observe(this, android.arch.lifecycle.Observer {
+        viewModel.loadingPassword.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 binding.passwordTextView.isEnabled = !it
                 binding.passwordRepeatTextView.isEnabled = !it
@@ -59,7 +59,7 @@ class ProfileFragment: BaseFragment() {
             }
         })
 
-        viewModel.dailyNotifications.observe(this, android.arch.lifecycle.Observer {
+        viewModel.dailyNotifications.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 binding.switchDailyNotifications.isChecked = it
                 if (it) {
@@ -70,7 +70,7 @@ class ProfileFragment: BaseFragment() {
             }
         })
 
-        viewModel.personalNotifications.observe(this, android.arch.lifecycle.Observer {
+        viewModel.personalNotifications.observe(this, androidx.lifecycle.Observer {
             it?.let {
                 binding.switchPersonalNotifications.isChecked = it
                 if (it) {

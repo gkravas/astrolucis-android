@@ -22,7 +22,7 @@
             ads:adUnitId="ca-app-pub-6040563814771861/4012341016">
         </com.google.android.gms.ads.AdView>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"

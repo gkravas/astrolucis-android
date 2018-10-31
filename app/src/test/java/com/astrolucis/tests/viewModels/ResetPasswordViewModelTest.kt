@@ -191,7 +191,7 @@ class ResetPasswordViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         resetPasswordViewModel.loading.addOnPropertyChangedCallback(listener)
 
         resetPasswordViewModel.changePassword()

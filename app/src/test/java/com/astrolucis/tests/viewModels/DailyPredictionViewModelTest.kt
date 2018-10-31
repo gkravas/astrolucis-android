@@ -70,7 +70,7 @@ class DailyPredictionViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         dailyPredictionViewModel.loading.addOnPropertyChangedCallback(listener)
 
         dailyPredictionViewModel.loadPrediction(NATAL_DATE_ID, DAILY_PREDICTION_DATE_SUCCESS)
@@ -92,7 +92,7 @@ class DailyPredictionViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         dailyPredictionViewModel.loading.addOnPropertyChangedCallback(listener)
 
         dailyPredictionViewModel.loadPrediction(NATAL_DATE_ID, DAILY_PREDICTION_DATE_FAIL)
@@ -109,7 +109,7 @@ class DailyPredictionViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         dailyPredictionViewModel.loading.addOnPropertyChangedCallback(listener)
 
         dailyPredictionViewModel.loadPrediction(NATAL_DATE_ID, DAILY_PREDICTION_DATE_SUCCESS)
@@ -128,7 +128,7 @@ class DailyPredictionViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         dailyPredictionViewModel.loading.addOnPropertyChangedCallback(listener)
 
         dailyPredictionViewModel.loadPrediction(NATAL_DATE_ID, DAILY_PREDICTION_DATE_SUCCESS)
@@ -152,7 +152,7 @@ class DailyPredictionViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = Mockito.mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = Mockito.mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         dailyPredictionViewModel.loading.addOnPropertyChangedCallback(listener)
 
         dailyPredictionViewModel.loadPrediction(NATAL_DATE_ID, DAILY_PREDICTION_DATE_SUCCESS)

@@ -1,7 +1,7 @@
 package com.astrolucis.features.natalChart
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.astrolucis.core.BaseViewModel
 import com.astrolucis.models.natalDate.Chart
 import com.astrolucis.services.interfaces.NatalDateService

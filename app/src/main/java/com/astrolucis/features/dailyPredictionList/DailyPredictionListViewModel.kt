@@ -1,9 +1,8 @@
 package com.astrolucis.features.dailyPredictionList
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.astrolucis.core.BaseViewModel
-import com.astrolucis.features.natalDate.NatalDateViewModel
 import com.astrolucis.services.interfaces.Preferences
 import java.util.*
 import kotlin.collections.ArrayList

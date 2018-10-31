@@ -1,9 +1,9 @@
 package com.astrolucis.features.profile
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
-import android.databinding.Observable
-import android.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
+import androidx.databinding.Observable
+import androidx.databinding.ObservableField
 import com.astrolucis.R
 import com.astrolucis.core.BaseViewModel
 import com.astrolucis.di.App

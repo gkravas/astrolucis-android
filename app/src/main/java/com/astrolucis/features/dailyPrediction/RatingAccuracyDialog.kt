@@ -1,10 +1,10 @@
 package com.astrolucis.features.dailyPrediction
 
 import android.app.Dialog
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.app.AppCompatDialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import android.view.LayoutInflater
 import com.astrolucis.R
 import com.astrolucis.databinding.DialogRatingBinding
@@ -45,7 +45,7 @@ class RatingAccuracyDialog: AppCompatDialogFragment() {
         val binding: DialogRatingBinding = DataBindingUtil
                 .inflate(LayoutInflater.from(context), R.layout.dialog_rating, null, false)
 
-        val builder = android.support.v7.app.AlertDialog.Builder(activity!!)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(activity!!)
         arguments?.let {
 
             builder.setView(binding.root)

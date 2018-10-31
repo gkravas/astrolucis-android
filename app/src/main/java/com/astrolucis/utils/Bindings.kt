@@ -1,15 +1,14 @@
 package com.astrolucis.utils
 
-import android.databinding.BindingAdapter
-import android.support.annotation.ArrayRes
-import android.support.annotation.LayoutRes
+import androidx.databinding.BindingAdapter
+import androidx.annotation.ArrayRes
+import androidx.annotation.LayoutRes
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.databinding.adapters.TextViewBindingAdapter.setText
-import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
-import android.view.View.OnFocusChangeListener
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import android.widget.EditText
 import com.astrolucis.core.ExtendedTextInputLayout
 

@@ -257,7 +257,7 @@ class NatalDateViewModelTest: BaseTest() {
 
         //check if the loading flag was raised
         //2 times means that it changed to true(loading) and then to false(non loading)
-        val listener = mock(android.databinding.Observable.OnPropertyChangedCallback::class.java)
+        val listener = mock(androidx.databinding.Observable.OnPropertyChangedCallback::class.java)
         natalDateViewModel.loading.addOnPropertyChangedCallback(listener)
 
         natalDateViewModel.save()

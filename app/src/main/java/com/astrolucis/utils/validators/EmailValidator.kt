@@ -1,6 +1,6 @@
 package com.astrolucis.utils.validators
 
-import android.databinding.ObservableField
+import androidx.databinding.ObservableField
 import android.util.Patterns
 
 class EmailValidator(inputBindable: ObservableField<CharSequence>,

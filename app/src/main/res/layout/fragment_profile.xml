@@ -8,12 +8,12 @@
         <variable name="viewModel" type="com.astrolucis.features.profile.ProfileViewModel"/>
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               tools:context="com.astrolucis.features.resetPassword.ResetPasswordViewModel">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -24,7 +24,7 @@
                 android:paddingBottom="@dimen/padding_medium"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding_medium"
@@ -44,7 +44,7 @@
                             android:gravity="center"
                             android:text="@string/profile.notificationsTitle.text"/>
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switch_daily_notifications"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                             android:checked="@={viewModel.dailyNotifications}"
                             android:text="@string/profile.dailyNotificationsSwitch.text"/>
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switch_personal_notifications"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -63,9 +63,9 @@
 
                     </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding_medium"
@@ -86,12 +86,12 @@
                             android:gravity="center"
                             android:text="@string/profile.changeEmailTitle.text"/>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:error="@{viewModel.emailError}">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/email_text_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                                 android:hint="@string/login.email.hint"
                                 android:text="@={viewModel.emailField}"/>
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/progress_bar_email"
@@ -119,9 +119,9 @@
                             android:onClick="@{(v) -> viewModel.changeEmail()}"/>
 
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/padding_medium"
@@ -143,13 +143,13 @@
                             android:gravity="center"
                             android:text="@string/profile.changePasswordTitle.text"/>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:passwordToggleEnabled="true"
                             app:error="@{viewModel.passwordError}">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/password_text_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -157,15 +157,15 @@
                                 android:hint="@string/login.password.hint"
                                 android:text="@={viewModel.passwordField}"/>
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:passwordToggleEnabled="true"
                             app:error="@{viewModel.passwordRepeatError}">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/password_repeat_text_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
                                 android:hint="@string/login.passwordRepeat.hint"
                                 android:text="@={viewModel.passwordRepeatField}"/>
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/progress_bar_password"
@@ -193,8 +193,8 @@
                             android:onClick="@{(v) -> viewModel.changePassword()}"/>
 
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.design.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

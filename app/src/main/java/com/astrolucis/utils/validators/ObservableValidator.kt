@@ -1,6 +1,6 @@
 package com.astrolucis.utils.validators
 
-import android.databinding.ObservableField
+import androidx.databinding.ObservableField
 
 open class ObservableValidator(private val inputBindable: ObservableField<CharSequence>,
                           private val errorTextBindable: ObservableField<CharSequence>,

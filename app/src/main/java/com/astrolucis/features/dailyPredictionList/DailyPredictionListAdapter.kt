@@ -1,16 +1,11 @@
 package com.astrolucis.features.dailyPredictionList
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.astrolucis.R
-import com.astrolucis.core.BaseActivity
 import com.astrolucis.databinding.CardPredictionBinding
-import com.astrolucis.features.home.HomeActivity
 import com.squareup.picasso.Picasso
-import org.koin.android.architecture.ext.KoinFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -71,5 +66,5 @@ class DailyPredictionListAdapter: RecyclerView.Adapter<DailyPredictionListAdapte
         }
     }
 
-    class ViewHolder(val binding: CardPredictionBinding?) : RecyclerView.ViewHolder(binding?.root)
+    class ViewHolder(val binding: CardPredictionBinding?) : RecyclerView.ViewHolder(binding?.root!!)
 }
